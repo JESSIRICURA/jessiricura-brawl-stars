@@ -253,11 +253,21 @@ if (url.pathname === "/eventsub" && request.method === "POST") {
       const evento = mensaje.event;
 
       if (evento) {
-        console.log("Mensaje recibido de Twitch:", {
-          usuario: evento.chatter_user_login,
-          mensaje: evento.message?.text
-        });
-      }
+  const usuario = evento.chatter_user_login;
+  const mensaje = (evento.message?.text || "").trim().toUpperCase();
+
+  console.log("Mensaje recibido de Twitch:", {
+    usuario,
+    mensaje
+  });
+
+  if (["A", "B", "C", "D"].includes(mensaje)) {
+    console.log("RESPUESTA DEL CONCURSO:", {
+      usuario,
+      respuesta: mensaje
+    });
+  }
+}
 
       return new Response(null, { status: 204 });
     }
