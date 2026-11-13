@@ -261,13 +261,35 @@ if (url.pathname === "/eventsub" && request.method === "POST") {
     mensaje
   });
 
-  if (["A", "B", "C", "D"].includes(mensaje)) {
-    console.log("RESPUESTA DEL CONCURSO:", {
+if (["A", "B", "C", "D"].includes(mensaje)) {
+  try {
+    const resultado = await fetch(
+      `${apiUrl}/rest/v1/rpc/registrar_respuesta_twitch`,
+      {
+        method: "POST",
+        headers: {
+          "apikey": apiKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          p_usuario: usuario,
+          p_respuesta: mensaje
+        })
+      }
+    );
+
+    const datos = await resultado.json();
+
+    console.log("RESULTADO DEL CONCURSO:", {
       usuario,
-      respuesta: mensaje
+      ...datos
     });
+
+  } catch (error) {
+    console.log("ERROR AL REGISTRAR RESPUESTA:", String(error));
   }
 }
+
 
       return new Response(null, { status: 204 });
     }
