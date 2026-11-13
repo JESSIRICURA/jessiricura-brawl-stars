@@ -302,6 +302,100 @@ if (url.pathname === "/eventsub" && request.method === "POST") {
       return json({ error: "Falta configurar Supabase" }, 500);
     }
 
+if (url.pathname === "/twitch/eventsub/crear" && request.method === "GET") {
+  try {
+    const cuentasResponse = await fetch(
+      `${apiUrl}/rest/v1/twitch_tokens?select=cuenta,twitch_user_id`,
+      {
+        headers: { apikey: apiKey }
+      }
+    );
+
+    if (!cuentasResponse.ok) {
+      return json({ error: "No se pudieron consultar las cuentas" }, 500);
+    }
+
+    const cuentas = await cuentasResponse.json();
+    const bot = cuentas.find(c => c.cuenta === "bot");
+    const canal = cuentas.find(c => c.cuenta === "canal");
+
+    if (!bot?.twitch_user_id || !canal?.twitch_user_id) {
+      return json({ error: "Faltan las cuentas autorizadas" }, 400);
+    }
+
+    const formulario = new URLSearchParams({
+      client_id: env.TWITCH_CLIENT_ID,
+      client_secret: env.TWITCH_CLIENT_SECRET,
+      grant_type: "client_credentials"
+    });
+
+    const tokenResponse = await fetch(
+      "https://id.twitch.tv/oauth2/token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formulario
+      }
+    );
+
+    const token = await tokenResponse.json();
+
+    if (!tokenResponse.ok) {
+      return json({
+        error: "No se pudo obtener el token de aplicación",
+        detalle: token.message || token.error
+      }, 400);
+    }
+
+    const suscripcion = await fetch(
+      "https://api.twitch.tv/helix/eventsub/subscriptions",
+      {
+        method: "POST",
+        headers: {
+          "Client-ID": env.TWITCH_CLIENT_ID,
+          "Authorization": `Bearer ${token.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          type: "channel.chat.message",
+          version: "1",
+          condition: {
+            broadcaster_user_id: canal.twitch_user_id,
+            user_id: bot.twitch_user_id
+          },
+          transport: {
+            method: "webhook",
+            callback: "https://jessiricura-brawl-backend.ricurajessica.workers.dev/eventsub",
+            secret: env.TWITCH_EVENTSUB_SECRET
+          }
+        })
+      }
+    );
+
+    const resultado = await suscripcion.json();
+
+    if (!suscripcion.ok) {
+      return json({
+        error: "Twitch no pudo crear la suscripción",
+        detalle: resultado
+      }, suscripcion.status);
+    }
+
+    return json({
+      mensaje: "Suscripción creada correctamente",
+      datos: resultado.data
+    });
+
+  } catch (error) {
+    return json({
+      error: "Error creando la suscripción",
+      detalle: String(error)
+    }, 500);
+  }
+}
+    
 if (url.pathname === "/twitch/usuarios" && request.method === "GET") {
   const consulta = await fetch(
     `${apiUrl}/rest/v1/twitch_tokens?select=cuenta,twitch_user_id,display_name`,
