@@ -117,7 +117,10 @@ if (url.pathname === "/oauth/callback") {
     const token = await tokenResponse.json();
 
     if (!tokenResponse.ok) {
-      return json({ error: "Twitch no ha podido autorizar la cuenta" }, 400);
+      return json({
+  error: "Twitch no ha podido autorizar la cuenta",
+  detalle: token.message || token.error || "Twitch no ha indicado el motivo"
+}, 400);
     }
 
     const userResponse = await fetch(
