@@ -252,30 +252,66 @@ function answer(choice){
   if(finished)return;
   finishQuestion(choice);
 }
-
-function finishQuestion(choice){
+async function finishQuestion(choice){
   if(finished)return;
   finished=true;
   clearInterval(clock);
-  const correct=questions[current].c;
+
   const buttons=document.querySelectorAll(".answer");
 
-  buttons.forEach((button,i)=>{
+  buttons.forEach(button=>{
     button.disabled=true;
-    if(i===correct)button.classList.add("correct");
-    else if(i===choice)button.classList.add("wrong");
   });
 
-  if(choice===correct){
-    score+=100;
-    document.getElementById("message").textContent="🎉 ¡CORRECTO! +100 puntos";
-  }else if(choice===null){
-    document.getElementById("message").textContent="⏰ ¡Se acabó el tiempo!";
-  }else{
-    document.getElementById("message").textContent="❌ ¡Respuesta incorrecta!";
+  if(choice===null){
+    document.getElementById("message").textContent=
+      "⏰ ¡Se acabó el tiempo!";
+    document.getElementById("next").hidden=false;
+    return;
   }
 
-  document.getElementById("score").textContent=score;
+  document.getElementById("message").textContent=
+    "Comprobando respuesta...";
+
+  try {
+    const response=await fetch(
+      "https://jessiricura-brawl-backend.ricurajessica.workers.dev/comprobar",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          id:questions[current].id,
+          respuesta:String.fromCharCode(65+choice)
+        })
+      }
+    );
+
+    const result=await response.json();
+
+    if(!response.ok){
+      throw new Error(result.error || "Error del servidor");
+    }
+
+    if(result.correcta){
+      buttons[choice].classList.add("correct");
+      score+=result.puntos;
+      document.getElementById("message").textContent=
+        "🎉 ¡CORRECTO! +"+result.puntos+" puntos";
+    }else{
+      buttons[choice].classList.add("wrong");
+      document.getElementById("message").textContent=
+        "❌ ¡Respuesta incorrecta!";
+    }
+
+    document.getElementById("score").textContent=score;
+
+  } catch(error) {
+    document.getElementById("message").textContent=
+      "Error al comprobar: "+error.message;
+  }
+
   document.getElementById("next").hidden=false;
 }
 
@@ -293,7 +329,7 @@ function nextQuestion(){
   loadQuestion();
 }
 
-loadQuestion();
+loadQuestionsFromDatabase();
 </script>
 
 </body>
