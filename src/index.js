@@ -22,6 +22,176 @@ export default {
 
     const url = new URL(request.url);
 
+if (url.pathname === "/oauth/twitch") {
+  const cuenta = url.searchParams.get("cuenta");
+
+  if (!["bot", "canal"].includes(cuenta)) {
+    return json({ error: "Cuenta no válida" }, 400);
+  }
+
+  const state = crypto.randomUUID();
+
+  const supabaseUrl = env.SUPABASE_URL.replace(/\/+$/, "");
+  const apiKey = env.SUPABASE_SECRET_KEY;
+
+  const guardado = await fetch(
+    `${supabaseUrl}/rest/v1/twitch_oauth_states`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": apiKey,
+  
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        state,
+        cuenta,
+        expira_en: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+      })
+    }
+  );
+
+  if (!guardado.ok) {
+    return json({ error: "No se pudo preparar la autorización" }, 500);
+  }
+
+  const scopes = cuenta === "bot"
+    ? "user:read:chat user:write:chat user:bot"
+    : "channel:bot";
+
+  const autorizacion = new URL("https://id.twitch.tv/oauth2/authorize");
+
+  autorizacion.searchParams.set("client_id", env.TWITCH_CLIENT_ID);
+  autorizacion.searchParams.set("redirect_uri",
+    "https://jessiricura-brawl-backend.ricurajessica.workers.dev/oauth/callback");
+  autorizacion.searchParams.set("response_type", "code");
+  autorizacion.searchParams.set("scope", scopes);
+  autorizacion.searchParams.set("state", state);
+
+  return Response.redirect(autorizacion.toString(), 302);
+}
+
+
+if (url.pathname === "/oauth/callback") {
+  try {
+    const code = url.searchParams.get("code");
+    const state = url.searchParams.get("state");
+
+    if (!code || !state) {
+      return json({ error: "Autorización incompleta" }, 400);
+    }
+
+    const supabaseUrl = env.SUPABASE_URL.trim().replace(/\/+$/, "");
+    const apiKey = env.SUPABASE_SECRET_KEY.trim();
+
+    const consulta = await fetch(
+      `${supabaseUrl}/rest/v1/twitch_oauth_states?state=eq.${encodeURIComponent(state)}&select=cuenta,expira_en`,
+    { headers: { apikey: apiKey } }
+    );
+
+    const estados = await consulta.json();
+    const registro = estados[0];
+
+    if (!registro || new Date(registro.expira_en) < new Date()) {
+      return json({ error: "Autorización caducada o no válida" }, 400);
+    }
+
+    const form = new URLSearchParams({
+      client_id: env.TWITCH_CLIENT_ID,
+      client_secret: env.TWITCH_CLIENT_SECRET,
+      code,
+      grant_type: "authorization_code",
+      redirect_uri: "https://jessiricura-brawl-backend.ricurajessica.workers.dev/oauth/callback"
+    });
+
+    const tokenResponse = await fetch(
+      "https://id.twitch.tv/oauth2/token",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: form
+      }
+    );
+
+    const token = await tokenResponse.json();
+
+    if (!tokenResponse.ok) {
+      return json({ error: "Twitch no ha podido autorizar la cuenta" }, 400);
+    }
+
+    const userResponse = await fetch(
+      "https://api.twitch.tv/helix/users",
+      {
+        headers: {
+          "Client-ID": env.TWITCH_CLIENT_ID,
+          "Authorization": `Bearer ${token.access_token}`
+        }
+      }
+    );
+
+    const userData = await userResponse.json();
+    const user = userData.data?.[0];
+
+    if (!user) {
+      return json({ error: "No se pudo identificar la cuenta de Twitch" }, 400);
+    }
+
+    const cuentaEsperada = registro.cuenta === "bot"
+      ? "cuchifleta13"
+      : "jessiricura";
+
+    if (user.login.toLowerCase() !== cuentaEsperada) {
+      return json({
+        error: "Has autorizado la cuenta equivocada. Debes usar " + cuentaEsperada
+      }, 400);
+    }
+
+    const guardado = await fetch(
+      `${supabaseUrl}/rest/v1/twitch_tokens?on_conflict=cuenta`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: apiKey,
+         
+          Prefer: "resolution=merge-duplicates,return=minimal"
+        },
+        body: JSON.stringify({
+          cuenta: registro.cuenta,
+          twitch_user_id: user.id,
+          display_name: user.display_name,
+          access_token: token.access_token,
+          refresh_token: token.refresh_token,
+          expires_at: new Date(Date.now() + token.expires_in * 1000).toISOString(),
+          scopes: token.scope
+        })
+      }
+    );
+
+    if (!guardado.ok) {
+      return json({ error: "No se pudieron guardar los permisos" }, 500);
+    }
+
+    await fetch(
+      `${supabaseUrl}/rest/v1/twitch_oauth_states?state=eq.${encodeURIComponent(state)}`,
+      {
+        method: "DELETE",
+        headers: { apikey: apiKey }
+      }
+    );
+
+    return json({
+      mensaje: "Cuenta autorizada correctamente",
+      cuenta: user.display_name
+    });
+
+  } catch (error) {
+    return json({ error: "Error durante la autorización" }, 500);
+  }
+}
+
+    
     if (url.pathname === "/") {
       return json({
         proyecto: "Jessiricura Brawl Stars Championship",
