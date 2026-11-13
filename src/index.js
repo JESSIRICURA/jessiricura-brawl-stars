@@ -463,6 +463,37 @@ if (url.pathname === "/twitch/usuarios" && request.method === "GET") {
     }
   });
 }
+
+    if (url.pathname === "/avanzar-pregunta" && request.method === "POST") {
+  try {
+    const resultado = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/rpc/avanzar_pregunta_twitch`,
+      {
+        method: "POST",
+        headers: {
+          "apikey": env.SUPABASE_SECRET_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      }
+    );
+
+    const datos = await resultado.json();
+
+    return new Response(JSON.stringify(datos), {
+      status: resultado.ok ? 200 : 500,
+      headers: { "Content-Type": "application/json" }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({
+      error: String(error)
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+}
     
     if (url.pathname === "/preguntas" && request.method === "GET") {
       try {
