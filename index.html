@@ -200,6 +200,10 @@ async function loadQuestionsFromDatabase() {
       ]
     }));
 
+    if (!questions || questions.length === 0) {
+  throw new Error("La base de datos no ha devuelto preguntas");
+}
+    
     current = 0;
     loadQuestion();
 
