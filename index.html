@@ -274,12 +274,17 @@ async function finishQuestion(choice){
     button.disabled=true;
   });
 
-  if(choice===null){
-    document.getElementById("message").textContent=
-      "⏰ ¡Se acabó el tiempo!";
-    document.getElementById("next").hidden=false;
-    return;
-  }
+if(choice===null){
+  document.getElementById("message").textContent=
+    "⏰ ¡Se acabó el tiempo!";
+  document.getElementById("next").hidden=true;
+
+  setTimeout(()=>{
+    nextQuestion();
+  },2000);
+
+  return;
+}
 
   document.getElementById("message").textContent=
     "Comprobando respuesta...";
