@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jessiricura Brawl Stars Championship</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:white;
+  background:radial-gradient(circle at top,#5423a8,#160d35 65%,#09051b);
+  min-height:100vh;
+}
+header{
+  text-align:center;
+  padding:25px 15px;
+  background:linear-gradient(90deg,#ff8b00,#ffcf24,#ff8b00);
+  color:#35105c;
+  border-bottom:5px solid #8b3b00;
+}
+header h1{
+  margin:0;
+  font-size:clamp(25px,5vw,44px);
+  text-shadow:2px 3px #fff;
+}
+header p{margin:8px 0 0;font-weight:bold}
+.container{max-width:1050px;margin:auto;padding:20px}
+.panel{
+  background:#261653;
+  border:3px solid #8b5cf6;
+  border-radius:20px;
+  padding:22px;
+  margin:18px 0;
+  box-shadow:0 8px 0 #100829;
+}
+h2{text-align:center;color:#ffcf24}
+.status{
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:12px;
+  text-align:center;
+}
+.stat{
+  background:#422581;
+  border:2px solid #a98aff;
+  border-radius:13px;
+  padding:12px 20px;
+  min-width:130px;
+}
+.stat strong{display:block;color:#ffcf24;font-size:25px}
+.question{
+  text-align:center;
+  font-size:clamp(21px,4vw,30px);
+  font-weight:bold;
+  margin:25px 0;
+}
+.timer{
+  width:100px;height:100px;
+  margin:20px auto;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:#ffb900;
+  color:#38105d;
+  border:7px solid #fff;
+  font-size:35px;
+  font-weight:900;
+}
+.answers{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+.answer{
+  border:3px solid white;
+  border-radius:14px;
+  padding:18px 10px;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#6338b7;
+}
+.answer:hover{filter:brightness(1.25)}
+.answer:disabled{cursor:default;opacity:.8}
+.answer.correct{background:#168b42}
+.answer.wrong{background:#b52d42}
+.message{
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  min-height:30px;
+  color:#ffcf24;
+  margin:15px 0;
+}
+button.next{
+  display:block;
+  margin:20px auto 0;
+  padding:14px 25px;
+  border:0;
+  border-radius:12px;
+  background:#ffbd16;
+  color:#35105c;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+table{width:100%;border-collapse:collapse;text-align:center}
+td,th{padding:12px;border-bottom:1px solid #7454ad}
+th{color:#ffcf24}
+footer{text-align:center;padding:25px;color:#cbb9ff}
+@media(max-width:550px){
+  .answers{grid-template-columns:1fr}
+  .panel{padding:15px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 JESSIRICURA 🏆</h1>
+  <p>BRAWL STARS CHAMPIONSHIP</p>
+  <p>¡Demuestra que eres el mejor jugador!</p>
+</header>
+
+<div class="container">
+
+  <div class="panel">
+    <div class="status">
+      <div class="stat">CONCURSO<strong id="round">1 / 10</strong></div>
+      <div class="stat">PREGUNTA<strong id="number">1</strong></div>
+      <div class="stat">PUNTOS<strong id="score">0</strong></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>⚡ ¡PREGUNTA DEL CAMPEONATO! ⚡</h2>
+    <div class="timer" id="timer">20</div>
+    <div class="question" id="question">
+      ¿Cómo se llama el personaje que utiliza un bate de béisbol?
+    </div>
+    <div class="answers" id="answers">
+      <button class="answer" onclick="answer(0)">A. Shelly</button>
+      <button class="answer" onclick="answer(1)">B. Bibi</button>
+      <button class="answer" onclick="answer(2)">C. Colt</button>
+      <button class="answer" onclick="answer(3)">D. Poco</button>
+    </div>
+    <div class="message" id="message">¡Elige tu respuesta!</div>
+    <button class="next" id="next" onclick="nextQuestion()" hidden>
+      SIGUIENTE PREGUNTA ➜
+    </button>
+  </div>
+
+  <div class="panel">
+    <h2>🥇 CLASIFICACIÓN</h2>
+    <table>
+      <thead><tr><th>POSICIÓN</th><th>JUGADOR</th><th>PUNTOS</th></tr></thead>
+      <tbody id="ranking">
+        <tr><td>🥇</td><td>Esperando jugadores...</td><td>0</td></tr>
+        <tr><td>🥈</td><td>---</td><td>0</td></tr>
+        <tr><td>🥉</td><td>---</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>
+  Jessiricura · Campeonato de Brawl Stars
+  <br>¡Que comience la competición!
+</footer>
+
+<script>
+const questions = [
+ {
+  q:"¿Cómo se llama el personaje que utiliza un bate de béisbol?",
+  a:["Shelly","Bibi","Colt","Poco"],c:1
+ },
+ {
+  q:"¿Qué personaje dispara con una escopeta?",
+  a:["Shelly","Poco","Nita","Brock"],c:0
+ },
+ {
+  q:"¿Qué personaje utiliza un oso en su habilidad especial?",
+  a:["Colt","Jessie","Nita","Dynamike"],c:2
+ },
+ {
+  q:"¿Cuál de estos personajes es un robot?",
+  a:["Bull","8-Bit","Bibi","Rosa"],c:1
+ },
+ {
+  q:"¿Qué personaje ataca con una guitarra?",
+  a:["Poco","El Primo","Bo","Darryl"],c:0
+ },
+ {
+  q:"¿Qué personaje lanza dinamita?",
+  a:["Brock","Dynamike","Colt","Leon"],c:1
+ },
+ {
+  q:"¿Qué personaje utiliza un arco?",
+  a:["Bo","Bull","Piper","Frank"],c:0
+ },
+ {
+  q:"¿Qué personaje puede hacerse invisible con su súper?",
+  a:["Rosa","Leon","Poco","Jessie"],c:1
+ },
+ {
+  q:"¿Cuál es el nombre del personaje que usa un martillo enorme?",
+  a:["Frank","Colt","Crow","Max"],c:0
+ },
+ {
+  q:"¿Qué personaje utiliza un paraguas como arma?",
+  a:["Piper","Shelly","Nita","Bull"],c:0
+ }
+];
+
+let current=0;
+let score=0;
+let time=20;
+let clock=null;
+let finished=false;
+
+function loadQuestion(){
+  clearInterval(clock);
+  finished=false;
+  time=20;
+  document.getElementById("timer").textContent=time;
+  document.getElementById("number").textContent=current+1;
+  document.getElementById("round").textContent=(current+1)+" / 10";
+  document.getElementById("score").textContent=score;
+  document.getElementById("question").textContent=questions[current].q;
+  document.getElementById("message").textContent="¡Elige tu respuesta!";
+  document.getElementById("next").hidden=true;
+
+  const area=document.getElementById("answers");
+  area.innerHTML="";
+  questions[current].a.forEach((option,i)=>{
+    const button=document.createElement("button");
+    button.className="answer";
+    button.textContent=String.fromCharCode(65+i)+". "+option;
+    button.onclick=()=>answer(i);
+    area.appendChild(button);
+  });
+
+  clock=setInterval(()=>{
+    time--;
+    document.getElementById("timer").textContent=time;
+    if(time<=0){
+      clearInterval(clock);
+      finishQuestion(null);
+    }
+  },1000);
+}
+
+function answer(choice){
+  if(finished)return;
+  finishQuestion(choice);
+}
+
+function finishQuestion(choice){
+  if(finished)return;
+  finished=true;
+  clearInterval(clock);
+  const correct=questions[current].c;
+  const buttons=document.querySelectorAll(".answer");
+
+  buttons.forEach((button,i)=>{
+    button.disabled=true;
+    if(i===correct)button.classList.add("correct");
+    else if(i===choice)button.classList.add("wrong");
+  });
+
+  if(choice===correct){
+    score+=100;
+    document.getElementById("message").textContent="🎉 ¡CORRECTO! +100 puntos";
+  }else if(choice===null){
+    document.getElementById("message").textContent="⏰ ¡Se acabó el tiempo!";
+  }else{
+    document.getElementById("message").textContent="❌ ¡Respuesta incorrecta!";
+  }
+
+  document.getElementById("score").textContent=score;
+  document.getElementById("next").hidden=false;
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=questions.length){
+    clearInterval(clock);
+    document.querySelector(".question").textContent="🏆 ¡CAMPEONATO TERMINADO!";
+    document.getElementById("answers").innerHTML="";
+    document.getElementById("timer").textContent="★";
+    document.getElementById("message").textContent="Has conseguido "+score+" puntos.";
+    document.getElementById("next").hidden=true;
+    return;
+  }
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
