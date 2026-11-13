@@ -250,50 +250,51 @@ if (url.pathname === "/eventsub" && request.method === "POST") {
     }
 
     if (messageType === "notification") {
-      const evento = mensaje.event;
 
-      if (evento) {
+const evento = mensaje.event;
+
+if (evento) {
   const usuario = evento.chatter_user_login;
-  const mensaje = (evento.message?.text || "").trim().toUpperCase();
+  const textoRespuesta = (evento.message?.text || "").trim().toUpperCase();
 
   console.log("Mensaje recibido de Twitch:", {
     usuario,
-    mensaje
+    mensaje: textoRespuesta
   });
 
-if (["A", "B", "C", "D"].includes(mensaje)) {
-  try {
-    const resultado = await fetch(
-      `${apiUrl}/rest/v1/rpc/registrar_respuesta_twitch`,
-      {
-        method: "POST",
-        headers: {
-          "apikey": apiKey,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          p_usuario: usuario,
-          p_respuesta: mensaje
-        })
-      }
-    );
+  if (["A", "B", "C", "D"].includes(textoRespuesta)) {
+    try {
+      const resultado = await fetch(
+        `${apiUrl}/rest/v1/rpc/registrar_respuesta_twitch`,
+        {
+          method: "POST",
+          headers: {
+            "apikey": apiKey,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            p_usuario: usuario,
+            p_respuesta: textoRespuesta
+          })
+        }
+      );
 
-    const datos = await resultado.json();
+      const datos = await resultado.json();
 
-    console.log("RESULTADO DEL CONCURSO:", {
-      usuario,
-      ...datos
-    });
+      console.log("RESULTADO DEL CONCURSO:", {
+        usuario,
+        ...datos
+      });
 
-  } catch (error) {
-    console.log("ERROR AL REGISTRAR RESPUESTA:", String(error));
+    } catch (error) {
+      console.log("ERROR AL REGISTRAR RESPUESTA:", String(error));
+    }
   }
 }
 
-
-      return new Response(null, { status: 204 });
-    }
-
+return new Response(null, { status: 204 });
+}
+      
     if (messageType === "revocation") {
       console.log("Suscripción EventSub revocada");
       return new Response(null, { status: 204 });
