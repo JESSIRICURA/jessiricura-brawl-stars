@@ -265,11 +265,11 @@ if (evento) {
   if (["A", "B", "C", "D"].includes(textoRespuesta)) {
     try {
       const resultado = await fetch(
-        `${apiUrl}/rest/v1/rpc/registrar_respuesta_twitch`,
+       `${env.SUPABASE_URL}/rest/v1/rpc/registrar_respuesta_twitch`,
         {
           method: "POST",
           headers: {
-            "apikey": apiKey,
+            "apikey": env.SUPABASE_SECRET_KEY,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
