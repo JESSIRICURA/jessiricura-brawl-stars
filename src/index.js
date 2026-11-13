@@ -194,6 +194,86 @@ if (url.pathname === "/oauth/callback") {
   }
 }
 
+
+if (url.pathname === "/eventsub" && request.method === "POST") {
+  try {
+    const messageId = request.headers.get("Twitch-Eventsub-Message-Id");
+    const timestamp = request.headers.get("Twitch-Eventsub-Message-Timestamp");
+    const signature = request.headers.get("Twitch-Eventsub-Message-Signature");
+    const messageType = request.headers.get("Twitch-Eventsub-Message-Type");
+
+    const body = await request.text();
+
+    if (!messageId || !timestamp || !signature || !messageType) {
+      return new Response("Faltan cabeceras", { status: 400 });
+    }
+
+    const fecha = Date.parse(timestamp);
+
+    if (!Number.isFinite(fecha) || Math.abs(Date.now() - fecha) > 10 * 60 * 1000) {
+      return new Response("Mensaje caducado", { status: 403 });
+    }
+
+    const encoder = new TextEncoder();
+
+    const key = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(env.TWITCH_EVENTSUB_SECRET),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+
+    const firmaCalculada = await crypto.subtle.sign(
+      "HMAC",
+      key,
+      encoder.encode(messageId + timestamp + body)
+    );
+
+    const hexadecimal = Array.from(new Uint8Array(firmaCalculada))
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    const firmaEsperada = "sha256=" + hexadecimal;
+
+    if (signature !== firmaEsperada) {
+      return new Response("Firma no válida", { status: 403 });
+    }
+
+    const mensaje = JSON.parse(body);
+
+    if (messageType === "webhook_callback_verification") {
+      return new Response(mensaje.challenge, {
+        status: 200,
+        headers: { "Content-Type": "text/plain" }
+      });
+    }
+
+    if (messageType === "notification") {
+      const evento = mensaje.event;
+
+      if (evento) {
+        console.log("Mensaje recibido de Twitch:", {
+          usuario: evento.chatter_user_login,
+          mensaje: evento.message?.text
+        });
+      }
+
+      return new Response(null, { status: 204 });
+    }
+
+    if (messageType === "revocation") {
+      console.log("Suscripción EventSub revocada");
+      return new Response(null, { status: 204 });
+    }
+
+    return new Response(null, { status: 204 });
+
+  } catch (error) {
+    return new Response("Error procesando EventSub", { status: 500 });
+  }
+}
+
     
     if (url.pathname === "/") {
       return json({
