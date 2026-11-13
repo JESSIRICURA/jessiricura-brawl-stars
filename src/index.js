@@ -22,7 +22,7 @@ export default {
     if (url.pathname === "/preguntas") {
       try {
         const apiUrl = env.SUPABASE_URL?.trim();
-        const apiKey = env.SUPABASE_SECRET_KEY?.trim();
+        const apiKey = env.SUPABASE_SECRET_KEY?.replace(/\s+/g, "");
 
         if (!apiUrl || !apiKey) {
           return Response.json(
