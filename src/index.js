@@ -14,32 +14,43 @@ export default {
       return Response.json({
         servidor: "activo",
         base_de_datos: env.SUPABASE_URL ? "configurada" : "pendiente",
+        clave: env.SUPABASE_SECRET_KEY ? "configurada" : "pendiente",
         concurso: "Brawl Stars"
       });
     }
 
     if (url.pathname === "/preguntas") {
-      if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY) {
+      try {
+        const apiUrl = env.SUPABASE_URL?.trim();
+        const apiKey = env.SUPABASE_SECRET_KEY?.trim();
+
+        if (!apiUrl || !apiKey) {
+          return Response.json(
+            { error: "Falta configurar la URL o la clave de Supabase" },
+            { status: 500 }
+          );
+        }
+
+        const response = await fetch(
+          `${apiUrl}/rest/v1/preguntas?select=id,pregunta,respuesta_a,respuesta_b,respuesta_c,respuesta_d,respuesta_correcta,dificultad&activa=eq.true&limit=10`,
+          {
+            headers: {
+              apikey: apiKey
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        return Response.json(data, {
+          status: response.status
+        });
+      } catch (error) {
         return Response.json(
-          { error: "Falta configurar Supabase" },
+          { error: "Error al consultar Supabase", detalle: String(error) },
           { status: 500 }
         );
       }
-
-      const response = await fetch(
-        `${env.SUPABASE_URL}/rest/v1/preguntas?select=id,pregunta,respuesta_a,respuesta_b,respuesta_c,respuesta_d,respuesta_correcta,dificultad&activa=eq.true&limit=10`,
-        {
-          headers: {
-            apikey: env.SUPABASE_SECRET_KEY
-          }
-        }
-      );
-
-      const data = await response.json();
-
-      return Response.json(data, {
-        status: response.status
-      });
     }
 
     return Response.json(
