@@ -302,6 +302,41 @@ if (url.pathname === "/eventsub" && request.method === "POST") {
       return json({ error: "Falta configurar Supabase" }, 500);
     }
 
+if (url.pathname === "/twitch/usuarios" && request.method === "GET") {
+  const consulta = await fetch(
+    `${apiUrl}/rest/v1/twitch_tokens?select=cuenta,twitch_user_id,display_name`,
+    {
+      headers: {
+        apikey: apiKey
+      }
+    }
+  );
+
+  if (!consulta.ok) {
+    return json({ error: "No se pudieron consultar las cuentas de Twitch" }, 500);
+  }
+
+  const cuentas = await consulta.json();
+
+  const bot = cuentas.find(cuenta => cuenta.cuenta === "bot");
+  const canal = cuentas.find(cuenta => cuenta.cuenta === "canal");
+
+  if (!bot?.twitch_user_id || !canal?.twitch_user_id) {
+    return json({ error: "Falta autorizar alguna cuenta de Twitch" }, 400);
+  }
+
+  return json({
+    canal: {
+      nombre: canal.display_name,
+      id: canal.twitch_user_id
+    },
+    bot: {
+      nombre: bot.display_name,
+      id: bot.twitch_user_id
+    }
+  });
+}
+    
     if (url.pathname === "/preguntas" && request.method === "GET") {
       try {
         const response = await fetch(
