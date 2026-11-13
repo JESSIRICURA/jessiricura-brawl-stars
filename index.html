@@ -245,10 +245,17 @@ function loadQuestion(){
   clock=setInterval(()=>{
     time--;
     document.getElementById("timer").textContent=time;
-    if(time<=0){
-      clearInterval(clock);
-      finishQuestion(null);
-    }
+   if(time<=0){
+  clearInterval(clock);
+  finishQuestion(null);
+
+  fetch("https://jessiricura-brawl-backend.ricurajessica.workers.dev/avanzar-pregunta", {
+    method: "POST"
+  })
+  .then(response => response.json())
+  .then(data => console.log("AVANCE DEL CONCURSO:", data))
+  .catch(error => console.error("ERROR AL AVANZAR:", error));
+}
   },1000);
 }
 
