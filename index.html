@@ -330,16 +330,18 @@ let championshipEnded = false;
 ================================= */
 
 async function loadQuestionsFromDatabase(){
+
   clearInterval(clock);
 
   document.getElementById("question").textContent =
-    "Cargando preguntas...";
+    "Cargando pregunta...";
 
   try{
+
     const response = await fetch(BACKEND + "/preguntas");
 
     if(!response.ok){
-      throw new Error("No se pudieron cargar las preguntas");
+      throw new Error("No se pudo cargar la pregunta activa");
     }
 
     const data = await response.json();
@@ -348,11 +350,13 @@ async function loadQuestionsFromDatabase(){
       ? data
       : data.preguntas;
 
-    if(!Array.isArray(lista) || lista.length === 0){
-      throw new Error("La base de datos no ha devuelto preguntas");
+    if(!Array.isArray(lista) || lista.length !== 1){
+      throw new Error("No hay una pregunta activa asignada");
     }
 
-    questions = lista.map(item => ({
+    const item = lista[0];
+
+    questions = [{
       id: item.id,
       q: item.pregunta,
       a: [
@@ -361,31 +365,30 @@ async function loadQuestionsFromDatabase(){
         item.respuesta_c,
         item.respuesta_d
       ]
-    }));
+    }];
 
-    const preguntasValidas = questions.every(p =>
-      p.id !== undefined &&
-      p.q &&
-      Array.isArray(p.a) &&
-      p.a.length === 4 &&
-      p.a.every(opcion => opcion !== null && opcion !== undefined)
-    );
+    const pregunta = questions[0];
 
-    if(!preguntasValidas){
-      throw new Error("Hay preguntas incompletas en la base de datos");
+    if(
+      !pregunta.id ||
+      !pregunta.q ||
+      pregunta.a.length !== 4 ||
+      pregunta.a.some(opcion => !opcion)
+    ){
+      throw new Error("La pregunta está incompleta");
     }
 
     current = 0;
-    score = 0;
     championshipEnded = false;
 
     loadQuestion();
 
   }catch(error){
-    console.error("ERROR AL CARGAR PREGUNTAS:", error);
+
+    console.error("ERROR AL CARGAR PREGUNTA:", error);
 
     document.getElementById("question").textContent =
-      "No se pudieron cargar las preguntas.";
+      "Esperando pregunta...";
 
     document.getElementById("message").textContent =
       error.message;
@@ -393,7 +396,6 @@ async function loadQuestionsFromDatabase(){
     document.getElementById("timer").textContent = "!";
   }
 }
-
 /* =================================
    MOSTRAR PREGUNTA
 ================================= */
@@ -423,13 +425,11 @@ function loadQuestion(){
   }
 
   document.getElementById("timer").textContent = time;
-  document.getElementById("number").textContent = current + 1;
-  document.getElementById("round").textContent =
-    (current + 1) + " / " + questions.length;
-
+  document.getElementById("number").textContent = "";
+document.getElementById("round").textContent = "";
   document.getElementById("score").textContent = score;
   document.getElementById("question").textContent = pregunta.q;
-  document.getElementById("message").textContent = "¡Elige tu respuesta!";
+  document.getElementById("message").textContent = "💬 ¡Responde en el chat de Twitch escribiendo A, B, C o D!";
   document.getElementById("next").hidden = true;
 
   const area = document.getElementById("answers");
@@ -442,7 +442,7 @@ function loadQuestion(){
     button.textContent =
       String.fromCharCode(65 + i) + ". " + option;
 
-    button.onclick = () => answer(i);
+  
 
     area.appendChild(button);
   });
@@ -612,7 +612,7 @@ function scheduleNextQuestion(){
   },2000);
 }
 
-function nextQuestion(){
+async function nextQuestion(){
 
   if(championshipEnded){
     return;
@@ -629,14 +629,7 @@ function nextQuestion(){
     advanceTimeout = null;
   }
 
-  current++;
-
-  if(current >= questions.length){
-    endChampionship();
-    return;
-  }
-
-  loadQuestion();
+  await loadQuestionsFromDatabase();
 }
 
 /* =================================
