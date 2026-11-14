@@ -492,6 +492,10 @@ async function finishQuestion(choice){
     return;
   }
 
+  async function finishQuestion(){
+
+  const preguntaId = questions[current].id;
+
   finished = true;
   clearInterval(clock);
 
@@ -520,17 +524,35 @@ async function finishQuestion(choice){
 
     console.log("AVANCE DEL CONCURSO:", data);
 
+    const respuestaResponse = await fetch(
+      BACKEND + "/respuesta-correcta?id=" + preguntaId
+    );
+
+    if(!respuestaResponse.ok){
+      throw new Error("No se pudo obtener la respuesta correcta");
+    }
+
+    const resultado = await respuestaResponse.json();
+    const letraCorrecta = resultado.correcta;
+
+    buttons.forEach(button => {
+      if(button.textContent.trim().startsWith(letraCorrecta + ".")){
+        button.classList.add("correct");
+      }
+    });
+
+    message.textContent = "✅ ¡La respuesta correcta era " + letraCorrecta + "!";
+
   }catch(error){
 
-    console.error("ERROR AL AVANZAR:", error);
+    console.error("ERROR AL FINALIZAR PREGUNTA:", error);
 
-    message.textContent = "⚠️ Error al avanzar la pregunta";
+    message.textContent = "⚠️ " + error.message;
 
   }
 
   scheduleNextQuestion();
 }
-
 /* =================================
    AVANCE AUTOMÁTICO
 ================================= */
@@ -544,7 +566,7 @@ function scheduleNextQuestion(){
   advanceTimeout = setTimeout(() => {
     advanceTimeout = null;
     nextQuestion();
-  },2000);
+  },3000);
 }
 
 async function nextQuestion(){
