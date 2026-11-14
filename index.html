@@ -27,7 +27,28 @@ header h1{
   text-shadow:2px 3px #fff;
 }
 header p{margin:8px 0 0;font-weight:bold}
-.container{max-width:1050px;margin:auto;padding:20px}
+.container{
+  max-width:1500px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(350px,1fr);
+  gap:20px;
+  align-items:start;
+}
+
+.container > .panel:first-child{
+  grid-column:1 / -1;
+}
+
+.container > .panel{
+  margin:0;
+}
+
+@media(max-width:800px){
+  .container{grid-template-columns:1fr}
+  .container > .panel:first-child{grid-column:1}
+}
 .panel{
   background:#261653;
   border:3px solid #8b5cf6;
