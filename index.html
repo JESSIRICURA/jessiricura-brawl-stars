@@ -503,94 +503,29 @@ async function finishQuestion(choice){
 
   const message = document.getElementById("message");
 
-  if(choice === null){
-
-    message.textContent = "⏰ ¡Se acabó el tiempo!";
-
-    try{
-      const response = await fetch(
-        BACKEND + "/avanzar-pregunta",
-        {method:"POST"}
-      );
-
-      if(!response.ok){
-        throw new Error("No se pudo comunicar el avance al servidor");
-      }
-
-      const data = await response.json();
-      console.log("AVANCE DEL CONCURSO:",data);
-
-    }catch(error){
-      console.error("ERROR AL AVANZAR:",error);
-    }
-
-    scheduleNextQuestion();
-    return;
-  }
-
-  message.textContent = "Comprobando respuesta...";
+  message.textContent = "⏰ ¡Se acabó el tiempo!";
 
   try{
 
-    const pregunta = questions[current];
-
-    if(!pregunta){
-      throw new Error("No se encuentra la pregunta actual");
-    }
-
     const response = await fetch(
-      BACKEND + "/comprobar",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          id:pregunta.id,
-          respuesta:String.fromCharCode(65 + choice)
-        })
-      }
+      BACKEND + "/avanzar-pregunta",
+      {method:"POST"}
     );
 
-    const result = await response.json();
-
     if(!response.ok){
-      throw new Error(result.error || "Error del servidor");
+      throw new Error("No se pudo avanzar a la siguiente pregunta");
     }
 
-    if(typeof result.correcta !== "boolean"){
-      throw new Error("El servidor no ha devuelto una respuesta válida");
-    }
+    const data = await response.json();
 
-    if(result.correcta){
-
-      if(buttons[choice]){
-        buttons[choice].classList.add("correct");
-      }
-
-      const puntos = Number(result.puntos) || 0;
-      score += puntos;
-
-      message.textContent =
-        "🎉 ¡CORRECTO! +" + puntos + " puntos";
-
-    }else{
-
-      if(buttons[choice]){
-        buttons[choice].classList.add("wrong");
-      }
-
-      message.textContent = "❌ ¡Respuesta incorrecta!";
-    }
-
-    document.getElementById("score").textContent = score;
+    console.log("AVANCE DEL CONCURSO:", data);
 
   }catch(error){
 
-    console.error("ERROR AL COMPROBAR:",error);
+    console.error("ERROR AL AVANZAR:", error);
 
-    message.textContent =
-      "⚠️ Error al comprobar: " + error.message;
+    message.textContent = "⚠️ Error al avanzar la pregunta";
+
   }
 
   scheduleNextQuestion();
