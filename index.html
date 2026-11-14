@@ -641,8 +641,10 @@ async function cargarClasificacionTwitch(){
       : [];
 
     jugadores.sort((a,b) =>
-      (Number(b.puntos) || 0) - (Number(a.puntos) || 0)
-    );
+  (Number(b.puntos) || 0) - (Number(a.puntos) || 0)
+);
+
+jugadores.splice(5);
 
     ranking.replaceChildren();
 
