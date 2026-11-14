@@ -135,6 +135,95 @@ button.next{
   font-weight:bold;
   cursor:pointer;
 }
+
+.championship{
+  background:linear-gradient(160deg,#392078,#160d35);
+  border:3px solid #ffcf24;
+  box-shadow:0 0 20px #8b5cf6,0 8px 0 #100829;
+  text-align:center;
+}
+
+.ranking-subtitle{
+  color:#ffcf24;
+  font-weight:bold;
+  margin:15px 0 25px;
+  letter-spacing:2px;
+}
+
+.champion-box{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.player-rank{
+  display:grid;
+  grid-template-columns:55px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:15px;
+  border:2px solid #8b5cf6;
+  border-radius:14px;
+  background:linear-gradient(100deg,#281653,#160d35);
+  box-shadow:0 4px 10px #0008;
+  animation:entrada .4s ease;
+}
+
+.player-position{
+  font-size:28px;
+}
+
+.player-name{
+  text-align:left;
+  font-size:18px;
+  font-weight:bold;
+  overflow-wrap:anywhere;
+}
+
+.player-points{
+  color:#ffcf24;
+  font-weight:bold;
+  font-size:17px;
+}
+
+.rank-1{
+  border-color:#ffcf24;
+  background:linear-gradient(100deg,#75500b,#392078);
+  box-shadow:0 0 18px #ffcf2480;
+}
+
+.rank-2{
+  border-color:#c0c0c0;
+}
+
+.rank-3{
+  border-color:#cd7f32;
+}
+
+@keyframes entrada{
+  from{opacity:0;transform:translateX(20px)}
+  to{opacity:1;transform:translateX(0)}
+}
+  
+.champion-loading{
+  padding:35px 10px;
+  color:#ffcf24;
+  font-size:20px;
+  font-weight:bold;
+  animation:brillo 1.5s infinite alternate;
+}
+
+.ranking-footer{
+  margin-top:25px;
+  color:#ffcf24;
+  font-weight:bold;
+}
+
+@keyframes brillo{
+  from{opacity:.6;transform:scale(.98)}
+  to{opacity:1;transform:scale(1.02)}
+}
+  
 table{width:100%;border-collapse:collapse;text-align:center}
 td,th{padding:12px;border-bottom:1px solid #7454ad}
 th{color:#ffcf24}
@@ -181,17 +270,27 @@ footer{text-align:center;padding:25px;color:#cbb9ff}
     </button>
   </div>
 
-  <div class="panel">
-    <h2>🥇 CLASIFICACIÓN</h2>
-    <table>
-      <thead><tr><th>POSICIÓN</th><th>JUGADOR</th><th>PUNTOS</th></tr></thead>
-      <tbody id="ranking">
-        <tr><td>🥇</td><td>Esperando jugadores...</td><td>0</td></tr>
-        <tr><td>🥈</td><td>---</td><td>0</td></tr>
-        <tr><td>🥉</td><td>---</td><td>0</td></tr>
-      </tbody>
-    </table>
+ <div class="panel championship">
+
+  <h2>🏆 TOP JUGADORES 🏆</h2>
+
+  <div class="ranking-subtitle">
+    ⭐ CLASIFICACIÓN EN DIRECTO ⭐
   </div>
+
+  <div class="champion-box" id="ranking">
+
+    <div class="champion-loading">
+      🎮 ¡ESPERANDO A LOS JUGADORES!
+    </div>
+
+  </div>
+
+  <div class="ranking-footer">
+    🔥 ¡LUCHA POR EL PRIMER PUESTO! 🔥
+  </div>
+
+</div>
 
 </div>
 
@@ -362,7 +461,11 @@ if(choice===null){
       "Error al comprobar: "+error.message;
   }
 
-  document.getElementById("next").hidden=false;
+  document.getElementById("next").hidden=true;
+
+setTimeout(()=>{
+  nextQuestion();
+},2000);
 }
 
 function nextQuestion(){
@@ -378,23 +481,10 @@ function nextQuestion(){
   }
   loadQuestion();
 }
-async function cargarClasificacionTwitch(){
-  try {
-    const response = await fetch(
-      "https://jessiricura-brawl-backend.ricurajessica.workers.dev/clasificacion"
-    );
-
-    const data = await response.json();
-
-    console.log("CLASIFICACIÓN TWITCH:", data);
-
-  } catch(error) {
-    console.error("ERROR CLASIFICACIÓN TWITCH:", error);
-  }
-}
-
 cargarClasificacionTwitch();
-  
+
+setInterval(cargarClasificacionTwitch, 5000);
+
 loadQuestionsFromDatabase();
 </script>
 
