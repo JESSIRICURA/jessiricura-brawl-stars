@@ -637,6 +637,64 @@ headers: {
   }
 }
 
+if (url.pathname === "/respuesta-correcta" && request.method === "GET") {
+  try {
+    const id = Number(url.searchParams.get("id"));
+
+    if (!Number.isInteger(id) || id < 1) {
+      return json({ error: "ID de pregunta no válido" }, 400);
+    }
+
+    // Comprobar cuál es la pregunta actualmente activa
+    const concursoConsulta = await fetch(
+      `${apiUrl}/rest/v1/concursos?select=pregunta_id_actual&estado=eq.activo&limit=1`,
+      {
+        headers: { apikey: apiKey }
+      }
+    );
+
+    if (!concursoConsulta.ok) {
+      return json({ error: "No se pudo consultar el concurso" }, 500);
+    }
+
+    const concursos = await concursoConsulta.json();
+
+    if (concursos.length && Number(concursos[0].pregunta_id_actual) === id) {
+      return json({ error: "La respuesta todavía no está disponible" }, 403);
+    }
+
+    // Consultar la respuesta correcta de la pregunta finalizada
+    const consulta = new URL(`${apiUrl}/rest/v1/preguntas`);
+    consulta.searchParams.set("select", "respuesta_correcta");
+    consulta.searchParams.set("id", `eq.${id}`);
+    consulta.searchParams.set("limit", "1");
+
+    const response = await fetch(consulta, {
+      headers: { apikey: apiKey }
+    });
+
+    if (!response.ok) {
+      return json({ error: "No se pudo consultar la respuesta" }, 500);
+    }
+
+    const data = await response.json();
+
+    if (!data.length) {
+      return json({ error: "Pregunta no encontrada" }, 404);
+    }
+
+    return json({
+      correcta: String(data[0].respuesta_correcta).toUpperCase()
+    });
+
+  } catch (error) {
+    return json({
+      error: "Error al obtener la respuesta correcta",
+      detalle: String(error)
+    }, 500);
+  }
+}
+    
     if (url.pathname === "/comprobar" && request.method === "POST") {
       try {
         const body = await request.json();
