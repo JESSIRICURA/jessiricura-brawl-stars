@@ -486,13 +486,12 @@ function answer(choice){
    COMPROBAR RESPUESTA Y AVANZAR
 ================================= */
 
+
 async function finishQuestion(choice){
 
   if(finished || championshipEnded){
     return;
   }
-
-  async function finishQuestion(){
 
   const preguntaId = questions[current].id;
 
@@ -553,6 +552,7 @@ async function finishQuestion(choice){
 
   scheduleNextQuestion();
 }
+
 /* =================================
    AVANCE AUTOMÁTICO
 ================================= */
