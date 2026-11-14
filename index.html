@@ -524,6 +524,23 @@ async function finishQuestion(choice){
 
     console.log("AVANCE DEL CONCURSO:", data);
 
+if(data.estado !== "avanzada"){
+  console.log("La pregunta todavía no ha avanzado:", data);
+
+  if(data.estado === "en_curso"){
+    const espera = Math.max(1, Number(data.segundos_restantes) || 1);
+
+    setTimeout(() => {
+      finished = false;
+      finishQuestion(null);
+    }, espera * 1000);
+
+    return;
+  }
+
+  throw new Error("El servidor no pudo avanzar a la siguiente pregunta");
+}
+    
     const respuestaResponse = await fetch(
       BACKEND + "/respuesta-correcta?id=" + preguntaId
     );
