@@ -482,7 +482,10 @@ if (url.pathname === "/twitch/usuarios" && request.method === "GET") {
 
     return new Response(JSON.stringify(datos), {
       status: resultado.ok ? 200 : 500,
-      headers: { "Content-Type": "application/json" }
+headers: {
+  "Content-Type": "application/json",
+  ...corsHeaders
+}
     });
 
   } catch (error) {
@@ -490,7 +493,10 @@ if (url.pathname === "/twitch/usuarios" && request.method === "GET") {
       error: String(error)
     }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+     headers: {
+  "Content-Type": "application/json",
+  ...corsHeaders
+}
     });
   }
 }
