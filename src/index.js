@@ -500,6 +500,94 @@ headers: {
     });
   }
 }
+
+    if (url.pathname === "/clasificacion" && request.method === "GET") {
+      try {
+        const concursosResponse = await fetch(
+          `${apiUrl}/rest/v1/concursos?select=id&estado=eq.activo&limit=1`,
+          { headers: { apikey: apiKey } }
+        );
+
+        if (!concursosResponse.ok) {
+          return json({ error: "No se pudo consultar el concurso" }, 500);
+        }
+
+        const concursosActivos = await concursosResponse.json();
+        let concurso = concursosActivos[0];
+        const concursoActivo = Boolean(concurso);
+
+        if (!concurso) {
+          const concursosFinalizadosUrl = new URL(`${apiUrl}/rest/v1/concursos`);
+          concursosFinalizadosUrl.searchParams.set("select", "id");
+          concursosFinalizadosUrl.searchParams.set("estado", "eq.finalizado");
+          concursosFinalizadosUrl.searchParams.set("order", "fecha_fin.desc");
+          concursosFinalizadosUrl.searchParams.set("limit", "1");
+
+          const finalizadosResponse = await fetch(concursosFinalizadosUrl, {
+            headers: { apikey: apiKey }
+          });
+
+          if (!finalizadosResponse.ok) {
+            return json({ error: "No se pudo consultar el último concurso" }, 500);
+          }
+
+          const concursosFinalizados = await finalizadosResponse.json();
+          concurso = concursosFinalizados[0];
+        }
+
+        if (!concurso) {
+          return json({ concurso_activo: false, clasificacion: [] });
+        }
+
+        const puntosPorJugador = new Map();
+        const tamanoPagina = 1000;
+        let desde = 0;
+
+        while (true) {
+          const respuestasUrl = new URL(`${apiUrl}/rest/v1/respuestas`);
+          respuestasUrl.searchParams.set("select", "twitch_username,puntos_obtenidos");
+          respuestasUrl.searchParams.set("concurso_id", `eq.${concurso.id}`);
+          respuestasUrl.searchParams.set("order", "id.asc");
+          respuestasUrl.searchParams.set("limit", String(tamanoPagina));
+          respuestasUrl.searchParams.set("offset", String(desde));
+
+          const respuestasResponse = await fetch(respuestasUrl, {
+            headers: { apikey: apiKey }
+          });
+
+          if (!respuestasResponse.ok) {
+            return json({ error: "No se pudieron consultar las respuestas" }, 500);
+          }
+
+          const respuestas = await respuestasResponse.json();
+
+          for (const respuesta of respuestas) {
+            const usuario = String(respuesta.twitch_username || "").trim().toLowerCase();
+            if (!usuario) continue;
+
+            const puntos = Number(respuesta.puntos_obtenidos) || 0;
+            puntosPorJugador.set(usuario, (puntosPorJugador.get(usuario) || 0) + puntos);
+          }
+
+          if (respuestas.length < tamanoPagina) break;
+          desde += respuestas.length;
+        }
+
+        const clasificacion = Array.from(puntosPorJugador, ([usuario, puntos]) => ({
+          usuario,
+          puntos
+        }))
+          .sort((a, b) => b.puntos - a.puntos || a.usuario.localeCompare(b.usuario))
+          .slice(0, 3);
+
+        return json({
+          concurso_activo: concursoActivo,
+          clasificacion
+        });
+      } catch (error) {
+        return json({ error: "Error al cargar la clasificación" }, 500);
+      }
+    }
     
     if (url.pathname === "/preguntas" && request.method === "GET") {
       try {
