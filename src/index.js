@@ -590,20 +590,52 @@ headers: {
     }
     
     if (url.pathname === "/preguntas" && request.method === "GET") {
-      try {
-        const response = await fetch(
-          `${apiUrl}/rest/v1/preguntas?select=id,pregunta,respuesta_a,respuesta_b,respuesta_c,respuesta_d,dificultad&activa=eq.true&limit=10`,
-          {
-            headers: { apikey: apiKey },
-          }
-        );
-
-        const data = await response.json();
-        return json(data, response.status);
-      } catch (error) {
-        return json({ error: String(error) }, 500);
+  try {
+    const concursoResponse = await fetch(
+      `${apiUrl}/rest/v1/concursos?select=pregunta_id_actual&estado=eq.activo&limit=1`,
+      {
+        headers: { apikey: apiKey }
       }
+    );
+
+    if (!concursoResponse.ok) {
+      return json({ error: "No se pudo consultar el concurso" }, 500);
     }
+
+    const concursos = await concursoResponse.json();
+
+    if (!concursos.length) {
+      return json({ error: "No hay concurso activo" }, 404);
+    }
+
+    const preguntaId = concursos[0].pregunta_id_actual;
+
+    if (!preguntaId) {
+      return json({ error: "No hay pregunta asignada todavía" }, 409);
+    }
+
+    const consulta = new URL(`${apiUrl}/rest/v1/preguntas`);
+
+    consulta.searchParams.set(
+      "select",
+      "id,pregunta,respuesta_a,respuesta_b,respuesta_c,respuesta_d,dificultad"
+    );
+
+    consulta.searchParams.set("id", `eq.${preguntaId}`);
+    consulta.searchParams.set("activa", "eq.true");
+
+    const response = await fetch(consulta, {
+      headers: { apikey: apiKey }
+    });
+
+    const data = await response.json();
+
+    return json(data, response.status);
+
+  } catch (error) {
+    return json({ error: String(error) }, 500);
+  }
+}
 
     if (url.pathname === "/comprobar" && request.method === "POST") {
       try {
