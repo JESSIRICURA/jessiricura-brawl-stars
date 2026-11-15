@@ -79,7 +79,7 @@ header p{
 header p:nth-of-type(1){font-size:clamp(16px,3vw,23px)}
 header p:nth-of-type(2){font-size:14px}
 
-/* ARENA */
+/* ARENA SUPERIOR */
 
 .arena{
   max-width:1450px;
@@ -138,7 +138,7 @@ header p:nth-of-type(2){font-size:14px}
   letter-spacing:2px;
 }
 
-/* PERSONAJES */
+/* PERSONAJES SUPERIORES */
 
 .brawlers-stage{
   width:100%;
@@ -170,8 +170,6 @@ header p:nth-of-type(2){font-size:14px}
   will-change:transform,opacity;
 }
 
-/* Entrada escalonada */
-
 .brawler-card:nth-child(1){animation-delay:.05s}
 .brawler-card:nth-child(2){animation-delay:.20s}
 .brawler-card:nth-child(3){animation-delay:.35s}
@@ -190,27 +188,11 @@ header p:nth-of-type(2){font-size:14px}
   will-change:transform;
 }
 
-/* Cada personaje tiene su propio gesto */
-
-.brawler-card:nth-child(1) img{
-  animation:brawlerIdle 3.1s ease-in-out infinite;
-}
-
-.brawler-card:nth-child(2) img{
-  animation:brawlerFunny2 3.8s ease-in-out infinite;
-}
-
-.brawler-card:nth-child(3) img{
-  animation:brawlerFunny3 4.2s ease-in-out infinite;
-}
-
-.brawler-card:nth-child(4) img{
-  animation:brawlerFunny4 3.6s ease-in-out infinite;
-}
-
-.brawler-card:nth-child(5) img{
-  animation:brawlerFunny5 4s ease-in-out infinite;
-}
+.brawler-card:nth-child(1) img{animation:brawlerIdle 3.1s ease-in-out infinite}
+.brawler-card:nth-child(2) img{animation:brawlerFunny2 3.8s ease-in-out infinite}
+.brawler-card:nth-child(3) img{animation:brawlerFunny3 4.2s ease-in-out infinite}
+.brawler-card:nth-child(4) img{animation:brawlerFunny4 3.6s ease-in-out infinite}
+.brawler-card:nth-child(5) img{animation:brawlerFunny5 4s ease-in-out infinite}
 
 .brawler-name{
   position:relative;
@@ -232,30 +214,13 @@ header p:nth-of-type(2){font-size:14px}
   transition:opacity .3s,transform .3s;
 }
 
-/* ENTRADA: salto y aterrizaje */
-
 @keyframes brawlerEnter{
-  0%{
-    opacity:0;
-    transform:translateY(100px) scale(.55) rotate(-15deg);
-  }
-  45%{
-    opacity:1;
-    transform:translateY(-22px) scale(1.12) rotate(8deg);
-  }
-  65%{
-    transform:translateY(8px) scale(.94) rotate(-4deg);
-  }
-  82%{
-    transform:translateY(-5px) scale(1.03) rotate(2deg);
-  }
-  100%{
-    opacity:1;
-    transform:translateY(0) scale(1) rotate(0);
-  }
+  0%{opacity:0;transform:translateY(100px) scale(.55) rotate(-15deg)}
+  45%{opacity:1;transform:translateY(-22px) scale(1.12) rotate(8deg)}
+  65%{transform:translateY(8px) scale(.94) rotate(-4deg)}
+  82%{transform:translateY(-5px) scale(1.03) rotate(2deg)}
+  100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
 }
-
-/* MOVIMIENTOS NATURALES */
 
 @keyframes brawlerIdle{
   0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}
@@ -263,8 +228,6 @@ header p:nth-of-type(2){font-size:14px}
   50%{transform:translateY(-11px) rotate(2deg) scale(1.025)}
   75%{transform:translateY(-4px) rotate(-1deg) scale(1.01)}
 }
-
-/* Gesto gracioso: se inclina y rebota */
 
 @keyframes brawlerFunny2{
   0%,65%,100%{transform:translateY(0) rotate(0) scale(1)}
@@ -274,8 +237,6 @@ header p:nth-of-type(2){font-size:14px}
   94%{transform:translateY(0) rotate(2deg)}
 }
 
-/* Gesto gracioso: pequeño baile */
-
 @keyframes brawlerFunny3{
   0%,100%{transform:translateY(0) rotate(0)}
   20%{transform:translateY(-7px) rotate(-5deg)}
@@ -283,8 +244,6 @@ header p:nth-of-type(2){font-size:14px}
   60%{transform:translateY(-9px) rotate(-4deg)}
   80%{transform:translateY(0) rotate(4deg)}
 }
-
-/* Gesto gracioso: sacudida */
 
 @keyframes brawlerFunny4{
   0%,72%,100%{transform:translateY(0) rotate(0)}
@@ -295,8 +254,6 @@ header p:nth-of-type(2){font-size:14px}
   93%{transform:translateY(-8px) rotate(0)}
 }
 
-/* Gesto gracioso: salto de celebración */
-
 @keyframes brawlerFunny5{
   0%,68%,100%{transform:translateY(0) rotate(0) scale(1)}
   75%{transform:translateY(-20px) rotate(-7deg) scale(1.05)}
@@ -304,36 +261,17 @@ header p:nth-of-type(2){font-size:14px}
   90%{transform:translateY(0) rotate(-3deg) scale(.98,1.02)}
 }
 
-/* SALIDA CAMINANDO */
+/* SALIDA DE PERSONAJES SUPERIORES */
 
 .brawlers-stage.changing .brawler-card{
   animation:brawlerWalkOut 1.35s cubic-bezier(.55,.05,.8,.4) forwards;
 }
 
-.brawlers-stage.changing .brawler-card:nth-child(1){
-  animation-delay:0s;
-  --walk-direction:-1;
-}
-
-.brawlers-stage.changing .brawler-card:nth-child(2){
-  animation-delay:.08s;
-  --walk-direction:-1;
-}
-
-.brawlers-stage.changing .brawler-card:nth-child(3){
-  animation-delay:.16s;
-  --walk-direction:1;
-}
-
-.brawlers-stage.changing .brawler-card:nth-child(4){
-  animation-delay:.24s;
-  --walk-direction:1;
-}
-
-.brawlers-stage.changing .brawler-card:nth-child(5){
-  animation-delay:.32s;
-  --walk-direction:1;
-}
+.brawlers-stage.changing .brawler-card:nth-child(1){animation-delay:0s;--walk-direction:-1}
+.brawlers-stage.changing .brawler-card:nth-child(2){animation-delay:.08s;--walk-direction:-1}
+.brawlers-stage.changing .brawler-card:nth-child(3){animation-delay:.16s;--walk-direction:1}
+.brawlers-stage.changing .brawler-card:nth-child(4){animation-delay:.24s;--walk-direction:1}
+.brawlers-stage.changing .brawler-card:nth-child(5){animation-delay:.32s;--walk-direction:1}
 
 .brawlers-stage.changing .brawler-card img{
   animation:brawlerWalking 1.35s ease-in-out forwards;
@@ -345,27 +283,12 @@ header p:nth-of-type(2){font-size:14px}
 }
 
 @keyframes brawlerWalkOut{
-  0%{
-    opacity:1;
-    transform:translateX(0) translateY(0) rotate(0) scale(1);
-  }
-  15%{
-    transform:translateX(calc(var(--walk-direction)*-5px)) translateY(-7px) rotate(-5deg) scale(1.02);
-  }
-  30%{
-    transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg) scale(.98);
-  }
-  45%{
-    transform:translateX(calc(var(--walk-direction)*-9px)) translateY(-8px) rotate(-5deg);
-  }
-  60%{
-    opacity:1;
-    transform:translateX(calc(var(--walk-direction)*15px)) translateY(0) rotate(5deg) scale(.96);
-  }
-  100%{
-    opacity:0;
-    transform:translateX(calc(var(--walk-direction)*260px)) translateY(35px) rotate(calc(var(--walk-direction)*25deg)) scale(.65);
-  }
+  0%{opacity:1;transform:translateX(0) translateY(0) rotate(0) scale(1)}
+  15%{transform:translateX(calc(var(--walk-direction)*-5px)) translateY(-7px) rotate(-5deg) scale(1.02)}
+  30%{transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg) scale(.98)}
+  45%{transform:translateX(calc(var(--walk-direction)*-9px)) translateY(-8px) rotate(-5deg)}
+  60%{opacity:1;transform:translateX(calc(var(--walk-direction)*15px)) translateY(0) rotate(5deg) scale(.96)}
+  100%{opacity:0;transform:translateX(calc(var(--walk-direction)*260px)) translateY(35px) rotate(calc(var(--walk-direction)*25deg)) scale(.65)}
 }
 
 @keyframes brawlerWalking{
@@ -443,19 +366,25 @@ header p:nth-of-type(2){font-size:14px}
   50%{transform:translateY(-18px) rotateY(180deg)}
 }
 
-/* CONTENEDOR */
+/* CONTENEDOR PRINCIPAL */
 
 .container{
   max-width:1450px;
   margin:auto;
   padding:20px 18px 25px;
   display:grid;
-  grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);
+  grid-template-columns:minmax(0,1.25fr) minmax(380px,.95fr);
   gap:22px;
   align-items:start;
 }
 
-.container>.panel:first-child{grid-column:1/-1}
+/* CLASIFICACIÓN ARRIBA, OCUPANDO TODO EL ANCHO */
+
+.ranking-panel{
+  grid-column:1/-1;
+}
+
+/* PANEL GENERAL */
 
 .panel{
   background:linear-gradient(145deg,#392078ee,#211044ee);
@@ -474,34 +403,6 @@ header p:nth-of-type(2){font-size:14px}
   text-shadow:2px 3px 0 #6c3900;
   letter-spacing:1px;
   margin-top:5px;
-}
-
-.status{
-  display:flex;
-  justify-content:space-around;
-  flex-wrap:wrap;
-  gap:13px;
-  text-align:center;
-}
-
-.stat{
-  flex:1;
-  min-width:125px;
-  background:linear-gradient(180deg,#398ee9,#17428c);
-  border:3px solid #65d8ff;
-  border-radius:16px;
-  padding:13px 18px;
-  font-weight:900;
-  box-shadow:0 6px 0 #10265e,0 0 15px #35bfff55;
-  transform:translateZ(12px);
-}
-
-.stat strong{
-  display:block;
-  color:var(--yellow);
-  font-size:27px;
-  margin-top:5px;
-  text-shadow:2px 2px #744000;
 }
 
 /* PREGUNTA */
@@ -702,6 +603,311 @@ button.next:hover{transform:translateY(-4px)}
   to{opacity:1;transform:scale(1.02)}
 }
 
+/* =====================================
+   NUEVA ARENA DE COMBATE TOP 5
+===================================== */
+
+.battle-panel{
+  min-width:0;
+  overflow:hidden;
+  border:4px solid #ffca36;
+  background:
+    radial-gradient(ellipse at 50% 45%,#7431b9 0%,transparent 65%),
+    linear-gradient(145deg,#24104c,#100624);
+  box-shadow:0 0 25px #ffb52d55,0 7px 0 #100522;
+}
+
+.battle-heading{
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.battle-heading h2{
+  margin:5px 0 5px;
+  color:#ffe52b;
+  font-size:clamp(20px,2.5vw,27px);
+  text-shadow:2px 3px #7b3100;
+}
+
+.battle-heading p{
+  color:#e6d4ff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
+  margin:0;
+}
+
+.battle-status{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin:15px 0;
+  color:#ffe52b;
+  font-size:12px;
+  font-weight:1000;
+  text-transform:uppercase;
+}
+
+.battle-live{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#ff3434;
+  box-shadow:0 0 10px #ff3434;
+  animation:livePulse .8s infinite alternate;
+}
+
+@keyframes livePulse{
+  from{opacity:.4;transform:scale(.8)}
+  to{opacity:1;transform:scale(1.25)}
+}
+
+.battle-stage{
+  position:relative;
+  min-height:285px;
+  padding:22px 7px 15px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:end;
+  gap:4px;
+  overflow:hidden;
+  border:3px solid #a56cff;
+  border-radius:18px;
+  background:
+    radial-gradient(ellipse at 50% 100%,#b46aff66,transparent 60%),
+    linear-gradient(180deg,#241052,#351568 55%,#160b32);
+  box-shadow:inset 0 0 25px #0009,0 5px 0 #100522;
+  isolation:isolate;
+}
+
+.battle-stage:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:-40%;
+  top:40%;
+  width:180%;
+  height:3px;
+  background:linear-gradient(90deg,transparent,#ffe52b,#fff,transparent);
+  opacity:.55;
+  transform:rotate(-12deg);
+  animation:battleLaser 3s linear infinite;
+}
+
+.battle-stage:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:38px;
+  z-index:0;
+  background:linear-gradient(180deg,transparent,#110728dd);
+  border-top:2px solid #b77aff;
+}
+
+@keyframes battleLaser{
+  0%{transform:translateX(-30%) rotate(-12deg);opacity:0}
+  35%{opacity:.7}
+  100%{transform:translateX(30%) rotate(-12deg);opacity:0}
+}
+
+.battle-fighter{
+  position:relative;
+  z-index:2;
+  min-width:0;
+  height:230px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  transform-origin:center bottom;
+  animation:fighterMove 1.7s ease-in-out infinite;
+  filter:drop-shadow(0 7px 5px #000b);
+}
+
+.battle-fighter:nth-child(1){animation-delay:0s;--attack-direction:1}
+.battle-fighter:nth-child(2){animation-delay:.3s;--attack-direction:-1}
+.battle-fighter:nth-child(3){animation-delay:.6s;--attack-direction:1}
+.battle-fighter:nth-child(4){animation-delay:.9s;--attack-direction:-1}
+.battle-fighter:nth-child(5){animation-delay:1.2s;--attack-direction:1}
+
+@keyframes fighterMove{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  20%{transform:translateY(-9px) rotate(3deg)}
+  38%{transform:translateY(0) rotate(-2deg)}
+  48%{transform:translateX(calc(var(--attack-direction)*7px)) rotate(calc(var(--attack-direction)*9deg)) scale(1.07)}
+  60%{transform:translateX(calc(var(--attack-direction)*-5px)) rotate(-5deg) scale(.96)}
+  75%{transform:translateY(-5px) rotate(3deg)}
+}
+
+.battle-fighter img{
+  display:block;
+  width:100%;
+  height:145px;
+  object-fit:contain;
+  object-position:center bottom;
+  transform-origin:center bottom;
+  animation:fighterAttack 1.7s ease-in-out infinite;
+  filter:drop-shadow(0 0 8px #b985ff88);
+}
+
+.battle-fighter:nth-child(2) img{animation-delay:.3s}
+.battle-fighter:nth-child(3) img{animation-delay:.6s}
+.battle-fighter:nth-child(4) img{animation-delay:.9s}
+.battle-fighter:nth-child(5) img{animation-delay:1.2s}
+
+@keyframes fighterAttack{
+  0%,35%,100%{transform:scale(1) rotate(0)}
+  45%{transform:scale(1.13) rotate(-7deg)}
+  53%{transform:scale(.95) rotate(7deg)}
+  62%{transform:scale(1.05) rotate(-3deg)}
+}
+
+.battle-fighter:after{
+  content:"";
+  position:absolute;
+  top:45%;
+  left:50%;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#fff36b;
+  box-shadow:0 0 9px 4px #ff9b24,0 0 20px 8px #ff3b19;
+  opacity:0;
+  animation:projectileShot 1.7s ease-out infinite;
+}
+
+.battle-fighter:nth-child(2):after{animation-delay:.3s}
+.battle-fighter:nth-child(3):after{animation-delay:.6s}
+.battle-fighter:nth-child(4):after{animation-delay:.9s}
+.battle-fighter:nth-child(5):after{animation-delay:1.2s}
+
+@keyframes projectileShot{
+  0%,38%{opacity:0;transform:translate(0,0) scale(.4)}
+  43%{opacity:1}
+  65%{opacity:1;transform:translate(calc(var(--attack-direction)*65px),-28px) scale(1.5)}
+  75%,100%{opacity:0;transform:translate(calc(var(--attack-direction)*90px),-40px) scale(.2)}
+}
+
+.battle-fighter:before{
+  content:"✦";
+  position:absolute;
+  z-index:4;
+  top:27%;
+  left:50%;
+  color:#fff36b;
+  font-size:23px;
+  text-shadow:0 0 10px #ff9418,0 0 18px #ffdc36;
+  opacity:0;
+  animation:impactFlash 1.7s ease-in-out infinite;
+}
+
+.battle-fighter:nth-child(2):before{animation-delay:.3s}
+.battle-fighter:nth-child(3):before{animation-delay:.6s}
+.battle-fighter:nth-child(4):before{animation-delay:.9s}
+.battle-fighter:nth-child(5):before{animation-delay:1.2s}
+
+@keyframes impactFlash{
+  0%,40%,100%{opacity:0;transform:scale(.2) rotate(0)}
+  48%{opacity:1;transform:scale(1.4) rotate(50deg)}
+  58%{opacity:0;transform:scale(1.8) rotate(100deg)}
+}
+
+.battle-player-position{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:5;
+  min-width:27px;
+  padding:4px 7px;
+  border:2px solid white;
+  border-radius:9px;
+  background:linear-gradient(#ffe95a,#ff9418);
+  color:#42105d;
+  font-size:12px;
+  font-weight:1000;
+  text-align:center;
+  box-shadow:0 3px 0 #813b00;
+}
+
+.battle-fighter.is-champion .battle-player-position{
+  background:linear-gradient(#fff57c,#ffb300);
+  box-shadow:0 0 14px #ffe52b,0 3px 0 #813b00;
+  animation:championGlow 1s infinite alternate;
+}
+
+@keyframes championGlow{
+  from{filter:brightness(1);transform:translateX(-50%) scale(1)}
+  to{filter:brightness(1.5);transform:translateX(-50%) scale(1.12)}
+}
+
+.battle-player-name{
+  position:relative;
+  z-index:5;
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:center;
+  padding:5px 2px;
+  border:2px solid #fff;
+  border-radius:9px;
+  background:linear-gradient(180deg,#6429bd,#281052);
+  color:white;
+  font-size:10px;
+  font-weight:1000;
+  box-shadow:0 3px 0 #100522;
+}
+
+.battle-player-points{
+  position:relative;
+  z-index:5;
+  margin-top:5px;
+  color:#ffe52b;
+  font-size:10px;
+  font-weight:1000;
+  text-shadow:1px 2px #000;
+}
+
+.battle-fighter.is-champion img{
+  filter:drop-shadow(0 0 10px #ffe52b) drop-shadow(0 0 18px #ff9418);
+}
+
+.battle-floor{
+  position:absolute;
+  z-index:1;
+  left:4%;
+  right:4%;
+  bottom:18px;
+  height:20px;
+  border-radius:50%;
+  background:#b879ff66;
+  filter:blur(8px);
+}
+
+.battle-message{
+  text-align:center;
+  color:#ffe52b;
+  font-size:12px;
+  font-weight:1000;
+  margin-top:15px;
+  letter-spacing:1px;
+  animation:brillo 1.5s infinite alternate;
+}
+
+.battle-empty{
+  grid-column:1/-1;
+  text-align:center;
+  align-self:center;
+  color:#ffe52b;
+  font-weight:1000;
+  line-height:1.7;
+  padding:30px 8px;
+}
+
 /* CELEBRACIÓN */
 
 .confetti{
@@ -725,18 +931,26 @@ footer{
   font-weight:bold;
 }
 
-/* MÓVILES */
+/* MÓVILES Y TABLETS */
 
-@media(max-width:800px){
-  .container{grid-template-columns:1fr}
-  .container>.panel:first-child{grid-column:1}
-  .arena{min-height:270px;padding:10px 5px}
-  .brawlers-stage{gap:2px;min-height:190px}
-  .brawler-card{height:175px}
-  .brawler-card img{height:145px}
-  .brawler-name{font-size:9px;padding:4px 6px}
-  .gift{width:35px;height:35px}
-  .arena-title{top:8px}
+@media(max-width:900px){
+  .container{
+    grid-template-columns:1fr;
+  }
+
+  .ranking-panel,
+  .question-panel,
+  .battle-panel{
+    grid-column:1;
+  }
+
+  .battle-stage{
+    min-height:270px;
+  }
+
+  .battle-fighter{
+    height:220px;
+  }
 }
 
 @media(max-width:550px){
@@ -756,21 +970,39 @@ footer{
   .gift-one{left:1%;top:65px}
   .gift-two{right:1%;top:70px}
 
+  .battle-stage{
+    min-height:230px;
+    padding:18px 3px 12px;
+    gap:2px;
+  }
+
+  .battle-fighter{
+    height:185px;
+  }
+
+  .battle-fighter img{
+    height:115px;
+  }
+
+  .battle-player-name{
+    font-size:8px;
+    padding:4px 1px;
+  }
+
+  .battle-player-points{
+    font-size:9px;
+  }
+
+  .battle-player-position{
+    font-size:10px;
+    min-width:23px;
+  }
+
   @keyframes brawlerWalkOut{
-    0%{
-      opacity:1;
-      transform:translateX(0) translateY(0) rotate(0) scale(1);
-    }
-    20%{
-      transform:translateX(calc(var(--walk-direction)*-4px)) translateY(-6px) rotate(-5deg);
-    }
-    45%{
-      transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg);
-    }
-    100%{
-      opacity:0;
-      transform:translateX(calc(var(--walk-direction)*150px)) translateY(25px) rotate(calc(var(--walk-direction)*20deg)) scale(.7);
-    }
+    0%{opacity:1;transform:translateX(0) translateY(0) rotate(0) scale(1)}
+    20%{transform:translateX(calc(var(--walk-direction)*-4px)) translateY(-6px) rotate(-5deg)}
+    45%{transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg)}
+    100%{opacity:0;transform:translateX(calc(var(--walk-direction)*150px)) translateY(25px) rotate(calc(var(--walk-direction)*20deg)) scale(.7)}
   }
 }
 
@@ -791,6 +1023,8 @@ footer{
   <p>BRAWL STARS CHAMPIONSHIP</p>
   <p>¡Demuestra que eres el mejor jugador!</p>
 </header>
+
+<!-- ARENA SUPERIOR -->
 
 <section class="arena">
 
@@ -820,25 +1054,29 @@ footer{
 
 <div class="container">
 
-<div class="panel championship">
-  <h2>🏆 TOP JUGADORES 🏆</h2>
+  <!-- CLASIFICACIÓN -->
 
-  <div class="ranking-subtitle">
-    ⭐ CLASIFICACIÓN EN DIRECTO ⭐
-  </div>
+  <div class="panel championship ranking-panel">
+    <h2>🏆 TOP JUGADORES 🏆</h2>
 
-  <div class="champion-box" id="ranking">
-    <div class="champion-loading">
-      🎮 ¡ESPERANDO A LOS JUGADORES!
+    <div class="ranking-subtitle">
+      ⭐ CLASIFICACIÓN EN DIRECTO ⭐
+    </div>
+
+    <div class="champion-box" id="ranking">
+      <div class="champion-loading">
+        🎮 ¡ESPERANDO A LOS JUGADORES!
+      </div>
+    </div>
+
+    <div class="ranking-footer">
+      🔥 ¡LUCHA POR EL PRIMER PUESTO! 🔥
     </div>
   </div>
 
-  <div class="ranking-footer">
-    🔥 ¡LUCHA POR EL PRIMER PUESTO! 🔥
-  </div>
-</div>
+  <!-- PREGUNTAS -->
 
-  <div class="panel">
+  <div class="panel question-panel">
     <h2>⚡ ¡PREGUNTA DEL CAMPEONATO! ⚡</h2>
 
     <div class="timer" id="timer">15</div>
@@ -858,7 +1096,31 @@ footer{
     </button>
   </div>
 
-  
+  <!-- NUEVA ARENA TOP 5 -->
+
+  <div class="panel battle-panel">
+
+    <div class="battle-heading">
+      <h2>⚔️ ARENA TOP 5 ⚔️</h2>
+      <p>¡LOS MEJORES LUCHAN POR LA VICTORIA!</p>
+    </div>
+
+    <div class="battle-status">
+      <span class="battle-live"></span>
+      COMBATE EN DIRECTO
+    </div>
+
+    <div class="battle-stage" id="battleStage">
+      <div class="battle-empty">
+        🎮 ESPERANDO A LOS CINCO MEJORES JUGADORES...
+      </div>
+    </div>
+
+    <div class="battle-message">
+      ⭐ ¡QUE GANE EL MEJOR! ⭐
+    </div>
+
+  </div>
 
 </div>
 
@@ -925,6 +1187,11 @@ async function cargarBrawlers(){
     intervaloBrawlers = setInterval(() => {
       cambiarGrupoBrawlers();
     },8000);
+
+    /* Cuando ya están cargados los personajes,
+       actualizamos también la arena de combate */
+
+    cargarClasificacionTwitch();
 
   }catch(error){
 
@@ -1016,8 +1283,6 @@ function cambiarGrupoBrawlers(){
   const escenario = document.getElementById("brawlersStage");
 
   escenario.classList.add("changing");
-
-  /* Dejamos que terminen de caminar y salir */
 
   setTimeout(() => {
 
@@ -1142,14 +1407,17 @@ function loadQuestion(){
   }
 
   document.getElementById("timer").textContent = time;
-  const numberElement = document.getElementById("number");
-const roundElement = document.getElementById("round");
-const scoreElement = document.getElementById("score");
 
-if(numberElement) numberElement.textContent = "";
-if(roundElement) roundElement.textContent = "";
-if(scoreElement) scoreElement.textContent = score;
+  const numberElement = document.getElementById("number");
+  const roundElement = document.getElementById("round");
+  const scoreElement = document.getElementById("score");
+
+  if(numberElement) numberElement.textContent = "";
+  if(roundElement) roundElement.textContent = "";
+  if(scoreElement) scoreElement.textContent = score;
+
   document.getElementById("question").textContent = pregunta.q;
+
   document.getElementById("message").textContent =
     "💬 ¡Responde en el chat de Twitch escribiendo A, B, C o D!";
 
@@ -1386,7 +1654,164 @@ function endChampionship(){
   document.getElementById("next").hidden = true;
 }
 
-/* CLASIFICACIÓN DE TWITCH */
+/* =====================================
+   ARENA DE COMBATE: TOP 5 DE TWITCH
+===================================== */
+
+let firmaJugadoresCombate = "";
+
+function actualizarDatosCombate(jugadores){
+
+  const escenario = document.getElementById("battleStage");
+
+  const firma = jugadores
+    .map(j => j.usuario || "Jugador")
+    .join("|");
+
+  /*
+    Si los mismos jugadores siguen en el TOP 5,
+    no reconstruimos sus personajes.
+    Solo actualizamos posiciones y puntos.
+    Así las animaciones no se reinician cada 5 segundos.
+  */
+
+  if(firma === firmaJugadoresCombate){
+
+    const luchadores = escenario.querySelectorAll(".battle-fighter");
+
+    jugadores.forEach((jugador,i) => {
+
+      const luchador = luchadores[i];
+
+      if(!luchador) return;
+
+      const posicion = luchador.querySelector(".battle-player-position");
+      const nombre = luchador.querySelector(".battle-player-name");
+      const puntos = luchador.querySelector(".battle-player-points");
+
+      if(posicion){
+        posicion.textContent = i === 0 ? "👑" : "#" + (i + 1);
+      }
+
+      if(nombre){
+        nombre.textContent = jugador.usuario || "Jugador";
+      }
+
+      if(puntos){
+        puntos.textContent = (Number(jugador.puntos) || 0) + " pts";
+      }
+
+    });
+
+    return;
+  }
+
+  firmaJugadoresCombate = firma;
+  escenario.replaceChildren();
+
+  if(jugadores.length === 0){
+
+    const vacio = document.createElement("div");
+    vacio.className = "battle-empty";
+    vacio.textContent = "🎮 ESPERANDO A LOS CINCO MEJORES JUGADORES...";
+
+    escenario.appendChild(vacio);
+    return;
+  }
+
+  /*
+    Seleccionamos cinco personajes distintos
+    de los modelos originales de Brawl Stars.
+  */
+
+  const personajes = [...todosLosBrawlers];
+
+  for(let i=personajes.length-1;i>0;i--){
+
+    const j = Math.floor(Math.random()*(i+1));
+
+    [personajes[i],personajes[j]] =
+      [personajes[j],personajes[i]];
+
+  }
+
+  jugadores.forEach((jugador,i) => {
+
+    const luchador = document.createElement("div");
+
+    luchador.className = "battle-fighter";
+
+    if(i === 0){
+      luchador.classList.add("is-champion");
+    }
+
+    const personaje = personajes.length
+      ? personajes[i % personajes.length]
+      : null;
+
+    const posicion = document.createElement("div");
+    posicion.className = "battle-player-position";
+    posicion.textContent = i === 0 ? "👑" : "#" + (i + 1);
+
+    luchador.appendChild(posicion);
+
+    if(personaje){
+
+      const imagen = document.createElement("img");
+
+      imagen.alt = personaje.name;
+      imagen.loading = "eager";
+
+      imagen.onerror = function(){
+
+        this.onerror = function(){
+          this.style.display = "none";
+        };
+
+        this.src = personaje.imageUrl2 || personaje.imageUrl || "";
+
+      };
+
+      imagen.src = obtenerImagenBrawler(personaje);
+
+      luchador.appendChild(imagen);
+
+    }else{
+
+      const personajeFallback = document.createElement("div");
+      personajeFallback.textContent = "⭐";
+      personajeFallback.style.fontSize = "65px";
+      personajeFallback.style.margin = "35px 0";
+
+      luchador.appendChild(personajeFallback);
+
+    }
+
+    const nombre = document.createElement("div");
+    nombre.className = "battle-player-name";
+    nombre.textContent = jugador.usuario || "Jugador";
+
+    const puntos = document.createElement("div");
+    puntos.className = "battle-player-points";
+    puntos.textContent = (Number(jugador.puntos) || 0) + " pts";
+
+    luchador.appendChild(nombre);
+    luchador.appendChild(puntos);
+
+    escenario.appendChild(luchador);
+
+  });
+
+  const suelo = document.createElement("div");
+  suelo.className = "battle-floor";
+  escenario.appendChild(suelo);
+
+  console.log("ARENA TOP 5 ACTUALIZADA:",jugadores);
+}
+
+/* =====================================
+   CLASIFICACIÓN DE TWITCH
+===================================== */
 
 async function cargarClasificacionTwitch(){
 
@@ -1410,7 +1835,15 @@ async function cargarClasificacionTwitch(){
       (Number(b.puntos) || 0) - (Number(a.puntos) || 0)
     );
 
-    jugadores.splice(5);
+    /* Los cinco primeros jugadores */
+
+    const topCinco = jugadores.slice(0,5);
+
+    /* Actualizar la arena de combate con los jugadores reales */
+
+    actualizarDatosCombate(topCinco);
+
+    /* Mantener la clasificación visual */
 
     ranking.replaceChildren();
 
@@ -1426,7 +1859,7 @@ async function cargarClasificacionTwitch(){
 
     const medallas = ["🥇","🥈","🥉"];
 
-    jugadores.forEach((jugador,i) => {
+    topCinco.forEach((jugador,i) => {
 
       const fila = document.createElement("div");
       fila.className = "player-rank rank-" + (i + 1);
@@ -1451,7 +1884,7 @@ async function cargarClasificacionTwitch(){
 
     });
 
-    console.log("CLASIFICACIÓN ACTUALIZADA:",jugadores);
+    console.log("CLASIFICACIÓN ACTUALIZADA:",topCinco);
 
   }catch(error){
 
@@ -1470,7 +1903,9 @@ async function cargarClasificacionTwitch(){
   }
 }
 
-/* INICIAR TODO */
+/* =====================================
+   INICIAR TODO
+===================================== */
 
 cargarBrawlers();
 
