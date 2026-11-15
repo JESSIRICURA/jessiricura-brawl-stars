@@ -1262,6 +1262,118 @@ footer{
   }
 }
 
+@media (min-width: 901px) {
+
+  /* Aprovechar la altura disponible */
+  .container {
+    min-height: calc(100vh - 350px);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  /* Arena superior */
+  .arena {
+    min-height: 230px;
+  }
+
+  .arena-floor {
+    height: 90px;
+  }
+
+  .brawlers-stage {
+    min-height: 175px;
+    margin-top: 45px;
+  }
+
+  .brawler-card {
+    height: 165px;
+    max-width: 180px;
+  }
+
+  .brawler-card img {
+    height: 140px;
+  }
+
+  /* Paneles */
+  .panel {
+    padding: 17px;
+  }
+
+  .panel h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  /* Pregunta */
+  .timer {
+    width: 100px;
+    height: 100px;
+    font-size: 38px;
+    margin: 15px auto;
+  }
+
+  .question {
+    font-size: 29px;
+    padding: 18px;
+    margin: 17px 0;
+  }
+
+  .answers {
+    gap: 12px;
+    margin-top: 15px;
+  }
+
+  .answer {
+    min-height: 62px;
+    font-size: 17px;
+  }
+
+  .message {
+    font-size: 16px;
+    margin: 14px 0;
+  }
+
+  button.next {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+
+  /* Clasificación */
+  .player-rank {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .player-name,
+  .player-points {
+    font-size: 16px;
+  }
+
+  .player-position {
+    font-size: 24px;
+  }
+
+  /* TOP 5 */
+  .battle-stage {
+    min-height: 220px;
+    padding: 15px 6px;
+  }
+
+  .battle-fighter {
+    height: 175px;
+  }
+
+  .battle-fighter img {
+    height: 120px;
+  }
+
+  .battle-player-name,
+  .battle-player-points {
+    font-size: 10px;
+  }
+}
+  
 </style>
 </head>
 
