@@ -30,8 +30,6 @@ body{
     linear-gradient(145deg,#08031a,#21104e 55%,#08051b);
 }
 
-/* FONDO ANIMADO */
-
 body:before{
   content:"";
   position:fixed;
@@ -78,27 +76,19 @@ header p{
   letter-spacing:2px;
 }
 
-header p:nth-of-type(1){
-  font-size:clamp(16px,3vw,23px);
-}
+header p:nth-of-type(1){font-size:clamp(16px,3vw,23px)}
+header p:nth-of-type(2){font-size:14px}
 
-header p:nth-of-type(2){
-  font-size:14px;
-}
-
-/* ESCENARIO 3D */
+/* ARENA */
 
 .arena{
   max-width:1450px;
-  margin:25px auto 0;
-  padding:20px;
+  margin:22px auto 0;
+  padding:15px 20px 5px;
   position:relative;
   perspective:1000px;
-  min-height:210px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:30px;
+  min-height:310px;
+  overflow:hidden;
 }
 
 .arena-floor{
@@ -106,102 +96,133 @@ header p:nth-of-type(2){
   bottom:0;
   left:8%;
   right:8%;
-  height:90px;
+  height:100px;
   border-radius:50%;
-  background:radial-gradient(ellipse,#7c42df88,#29105b33 65%,transparent 75%);
+  background:radial-gradient(ellipse,#7c42df99,#29105b33 65%,transparent 75%);
   transform:rotateX(65deg);
   filter:blur(3px);
 }
 
 .arena-title{
   position:relative;
-  z-index:1;
+  z-index:5;
+  width:max-content;
+  max-width:95%;
+  margin:0 auto 5px;
   text-align:center;
-  padding:15px 25px;
+  padding:13px 25px;
   border:3px solid #ffe34a;
   border-radius:20px;
   background:linear-gradient(145deg,#5729a6,#24104e);
   box-shadow:0 8px 0 #13072d,0 0 30px #a36cff88;
-  transform:rotateX(5deg);
 }
 
 .arena-title h2{
   margin:0;
   color:#ffe52b;
-  font-size:clamp(20px,4vw,32px);
+  font-size:clamp(18px,3vw,30px);
   text-shadow:3px 3px #6b3200;
 }
 
 .arena-title p{
-  margin:8px 0 0;
+  margin:7px 0 0;
   font-weight:900;
   letter-spacing:2px;
+  font-size:12px;
 }
 
-/* PERSONAJES DECORATIVOS */
+/* GALERÍA DE BRAWLERS */
 
-.character{
+.brawler-gallery{
   position:relative;
-  z-index:2;
-  width:145px;
-  height:165px;
+  z-index:3;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  align-items:end;
+  justify-items:center;
+  gap:8px;
+  max-width:1150px;
+  margin:0 auto;
+  min-height:220px;
+}
+
+.brawler-slot{
+  width:100%;
+  height:225px;
   display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
   align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  animation:characterFloat 3s ease-in-out infinite;
-  filter:drop-shadow(0 14px 8px #0008);
+  position:relative;
+  animation:brawlerEnter .9s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:var(--delay,0s);
 }
 
-.character:nth-of-type(3){
-  animation-delay:.8s;
+.brawler-slot:nth-child(even){
+  animation-name:brawlerEnterAlternate;
 }
 
-.character-art{
-  font-size:105px;
-  line-height:1;
-  transform:rotateY(-12deg) rotateX(5deg);
-  text-shadow:
-    3px 5px 0 #54208a,
-    6px 9px 0 #17082d,
-    0 0 25px #ffe52b88;
+.brawler-image{
+  display:block;
+  max-width:100%;
+  width:auto;
+  height:205px;
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 12px 7px #000b);
+  transform-origin:center bottom;
+  animation:brawlerFloat 3s ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+  transition:filter .3s,transform .3s;
 }
 
-.character-name{
+.brawler-slot:hover .brawler-image{
+  filter:drop-shadow(0 0 18px #ffe52b) drop-shadow(0 12px 7px #000b);
+  transform:scale(1.08);
+}
+
+.brawler-name{
   position:absolute;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
+  bottom:2px;
+  z-index:4;
   background:linear-gradient(#ffe85b,#ff9810);
   color:#40105d;
   border:2px solid white;
   border-radius:20px;
-  padding:5px 13px;
-  font-size:12px;
+  padding:5px 12px;
+  font-size:11px;
   font-weight:1000;
   white-space:nowrap;
   box-shadow:0 4px 0 #8c4200;
+  text-transform:uppercase;
 }
 
-@keyframes characterFloat{
-  0%,100%{transform:translateY(0) rotate(-3deg)}
-  50%{transform:translateY(-17px) rotate(3deg)}
+@keyframes brawlerEnter{
+  from{opacity:0;transform:translateX(-70px) translateY(35px) scale(.65)}
+  to{opacity:1;transform:translateX(0) translateY(0) scale(1)}
 }
 
-/* REGALOS 3D */
+@keyframes brawlerEnterAlternate{
+  from{opacity:0;transform:translateX(70px) translateY(35px) scale(.65)}
+  to{opacity:1;transform:translateX(0) translateY(0) scale(1)}
+}
+
+@keyframes brawlerFloat{
+  0%,100%{translate:0 0;rotate:-2deg}
+  50%{translate:0 -10px;rotate:2deg}
+}
+
+/* REGALOS */
 
 .gift{
   position:absolute;
-  z-index:1;
+  z-index:2;
   width:48px;
   height:48px;
   border:3px solid white;
   border-radius:9px;
   background:linear-gradient(135deg,#ffdf37,#f08008);
-  box-shadow:
-    inset -8px -8px 0 #b84d00,
-    0 8px 0 #743000,
-    0 0 20px #ffb72c;
+  box-shadow:inset -8px -8px 0 #b84d00,0 8px 0 #743000,0 0 20px #ffb72c;
   animation:giftFloat 4s ease-in-out infinite;
 }
 
@@ -229,36 +250,36 @@ header p:nth-of-type(2){
   background:#f52e74;
 }
 
-.gift-one{left:5%;top:15px}
-.gift-two{right:6%;top:35px;animation-delay:1s;transform:scale(.8)}
-.gift-three{right:20%;bottom:10px;animation-delay:2s;transform:scale(.65)}
+.gift-one{left:4%;top:90px}
+.gift-two{right:5%;top:115px;animation-delay:1s}
+.gift-three{right:18%;bottom:5px;animation-delay:2s}
 
 @keyframes giftFloat{
   0%,100%{translate:0 0;rotate:-8deg}
   50%{translate:0 -20px;rotate:10deg}
 }
 
-/* MONEDAS Y ESTRELLAS */
+/* MONEDAS */
 
 .floating{
   position:absolute;
   font-size:32px;
-  z-index:1;
+  z-index:2;
   filter:drop-shadow(0 5px 4px #0008);
   animation:spinFloat 5s ease-in-out infinite;
 }
 
-.coin-one{left:20%;top:10px}
-.coin-two{right:15%;top:5px;animation-delay:1s}
-.star-one{left:12%;bottom:5px;animation-delay:2s}
-.star-two{right:10%;bottom:0;animation-delay:1.5s}
+.coin-one{left:17%;top:65px}
+.coin-two{right:16%;top:55px;animation-delay:1s}
+.star-one{left:10%;bottom:10px;animation-delay:2s}
+.star-two{right:10%;bottom:5px;animation-delay:1.5s}
 
 @keyframes spinFloat{
   0%,100%{transform:translateY(0) rotateY(0deg)}
   50%{transform:translateY(-18px) rotateY(180deg)}
 }
 
-/* CONTENEDOR */
+/* CONTENEDORES */
 
 .container{
   max-width:1450px;
@@ -270,19 +291,14 @@ header p:nth-of-type(2){
   align-items:start;
 }
 
-.container>.panel:first-child{
-  grid-column:1/-1;
-}
+.container>.panel:first-child{grid-column:1/-1}
 
 .panel{
   background:linear-gradient(145deg,#392078ee,#211044ee);
   border:4px solid #a879ff;
   border-radius:23px;
   padding:23px;
-  box-shadow:
-    0 7px 0 #100522,
-    0 0 25px #8b5cf655,
-    inset 0 0 25px #ffffff0b;
+  box-shadow:0 7px 0 #100522,0 0 25px #8b5cf655,inset 0 0 25px #ffffff0b;
   position:relative;
   transform-style:preserve-3d;
 }
@@ -336,10 +352,7 @@ header p:nth-of-type(2){
   border:3px solid #ffdc45;
   border-radius:18px;
   background:linear-gradient(135deg,#7044c8,#32176e);
-  box-shadow:
-    inset 0 0 20px #0005,
-    0 7px 0 #160a35,
-    0 0 25px #a56cff66;
+  box-shadow:inset 0 0 20px #0005,0 7px 0 #160a35,0 0 25px #a56cff66;
   transform:translateZ(15px);
 }
 
@@ -359,10 +372,7 @@ header p:nth-of-type(2){
   font-size:43px;
   font-weight:1000;
   text-shadow:1px 2px #fff;
-  box-shadow:
-    0 7px 0 #783900,
-    0 0 30px #ffce35aa,
-    inset -7px -7px 10px #e47a00;
+  box-shadow:0 7px 0 #783900,0 0 30px #ffce35aa,inset -7px -7px 10px #e47a00;
   animation:timerPulse 2s infinite ease-in-out;
 }
 
@@ -416,10 +426,7 @@ header p:nth-of-type(2){
   transform:translateY(-4px) translateZ(15px);
 }
 
-.answer:disabled{
-  cursor:default;
-  opacity:1;
-}
+.answer:disabled{cursor:default;opacity:1}
 
 .answer.correct{
   background:linear-gradient(180deg,#35ed75,#078c3b)!important;
@@ -428,9 +435,7 @@ header p:nth-of-type(2){
   animation:correcta .6s infinite alternate;
 }
 
-.answer.wrong{
-  background:#a52a42!important;
-}
+.answer.wrong{background:#a52a42!important}
 
 @keyframes correcta{
   from{transform:scale(1)}
@@ -462,9 +467,7 @@ button.next{
   transition:transform .2s;
 }
 
-button.next:hover{
-  transform:translateY(-4px);
-}
+button.next:hover{transform:translateY(-4px)}
 
 /* CLASIFICACIÓN */
 
@@ -482,11 +485,7 @@ button.next:hover{
   letter-spacing:2px;
 }
 
-.champion-box{
-  display:flex;
-  flex-direction:column;
-  gap:13px;
-}
+.champion-box{display:flex;flex-direction:column;gap:13px}
 
 .player-rank{
   display:grid;
@@ -501,22 +500,9 @@ button.next:hover{
   animation:entrada .4s ease;
 }
 
-.player-position{
-  font-size:29px;
-}
-
-.player-name{
-  text-align:left;
-  font-size:18px;
-  font-weight:1000;
-  overflow-wrap:anywhere;
-}
-
-.player-points{
-  color:var(--yellow);
-  font-weight:1000;
-  font-size:18px;
-}
+.player-position{font-size:29px}
+.player-name{text-align:left;font-size:18px;font-weight:1000;overflow-wrap:anywhere}
+.player-points{color:var(--yellow);font-weight:1000;font-size:18px}
 
 .rank-1{
   border-color:#ffe43c;
@@ -580,29 +566,33 @@ footer{
 @media(max-width:800px){
   .container{grid-template-columns:1fr}
   .container>.panel:first-child{grid-column:1}
-  .arena{gap:5px;min-height:160px;padding:10px}
-  .character{width:90px;height:130px}
-  .character-art{font-size:72px}
-  .arena-title{padding:12px}
+  .arena{min-height:260px;padding:12px 8px}
+  .brawler-gallery{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+  .brawler-slot{height:175px}
+  .brawler-image{height:155px;max-width:100%}
+  .arena-title{padding:10px 14px}
   .gift{width:35px;height:35px}
 }
 
 @media(max-width:550px){
   .answers{grid-template-columns:1fr}
   .panel{padding:16px}
-  .player-rank{
-    grid-template-columns:40px 1fr auto;
-    gap:8px;
-    padding:12px;
-  }
+  .player-rank{grid-template-columns:40px 1fr auto;gap:8px;padding:12px}
   .player-name{font-size:15px}
   .player-points{font-size:14px}
   .timer{width:105px;height:105px;font-size:37px}
-  .arena-title p{font-size:10px}
-  .character{width:65px;height:110px}
-  .character-art{font-size:55px}
-  .character-name{font-size:9px;padding:4px 7px}
+  .arena{min-height:330px}
+  .arena-title p{font-size:9px}
+  .brawler-gallery{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    row-gap:0;
+  }
+  .brawler-slot{height:140px}
+  .brawler-image{height:125px}
+  .brawler-name{font-size:8px;padding:3px 6px}
   .floating{font-size:22px}
+  .gift-three{display:none}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -623,25 +613,17 @@ footer{
   <p>¡Demuestra que eres el mejor jugador!</p>
 </header>
 
-<!-- ARENA 3D DECORATIVA -->
-
 <section class="arena">
 
   <div class="arena-floor"></div>
-
-  <div class="character">
-    <div class="character-art">🤠</div>
-    <div class="character-name">COLT</div>
-  </div>
 
   <div class="arena-title">
     <h2>⚔️ ARENA CHAMPIONSHIP ⚔️</h2>
     <p>¡LA BATALLA POR LA VICTORIA!</p>
   </div>
 
-  <div class="character">
-    <div class="character-art">🌵</div>
-    <div class="character-name">SPIKE</div>
+  <div class="brawler-gallery" id="brawlerGallery">
+    <div class="champion-loading">🎮 CARGANDO BRAWLERS...</div>
   </div>
 
   <div class="gift gift-one"></div>
@@ -713,6 +695,143 @@ footer{
 <script>
 const BACKEND =
   "https://jessiricura-brawl-backend.ricurajessica.workers.dev";
+
+/* =====================================
+   GALERÍA AUTOMÁTICA DE BRAWLERS
+   ===================================== */
+
+const BRAWLERS_API = "https://api.brawlapi.com/v1/brawlers";
+const BRAWLER_IMAGE_BASE = "https://cdn.brawlify.com/brawlers/model/";
+
+let todosLosBrawlers = [];
+let brawlersMostrados = [];
+let cambioBrawlersInterval = null;
+
+function mezclarArray(array){
+
+  const copia = [...array];
+
+  for(let i=copia.length-1;i>0;i--){
+
+    const j = Math.floor(Math.random()*(i+1));
+
+    [copia[i],copia[j]] = [copia[j],copia[i]];
+
+  }
+
+  return copia;
+}
+
+async function cargarBrawlers(){
+
+  const galeria = document.getElementById("brawlerGallery");
+
+  try{
+
+    const response = await fetch(BRAWLERS_API);
+
+    if(!response.ok){
+      throw new Error("No se pudo conectar con el catálogo de Brawlers");
+    }
+
+    const data = await response.json();
+
+    if(!Array.isArray(data.list)){
+      throw new Error("El catálogo de Brawlers no tiene el formato esperado");
+    }
+
+    todosLosBrawlers = data.list.filter(brawler =>
+      brawler.released === true && brawler.id
+    );
+
+    if(todosLosBrawlers.length < 5){
+      throw new Error("No hay suficientes personajes disponibles");
+    }
+
+    mostrarNuevosBrawlers();
+
+    if(cambioBrawlersInterval !== null){
+      clearInterval(cambioBrawlersInterval);
+    }
+
+    cambioBrawlersInterval = setInterval(
+      mostrarNuevosBrawlers,
+      6500
+    );
+
+  }catch(error){
+
+    console.error("ERROR AL CARGAR BRAWLERS:",error);
+
+    galeria.innerHTML =
+      '<div class="champion-loading">⚠️ No se pudieron cargar los personajes</div>';
+
+  }
+}
+
+function mostrarNuevosBrawlers(){
+
+  if(todosLosBrawlers.length < 5){
+    return;
+  }
+
+  const galeria = document.getElementById("brawlerGallery");
+
+  let disponibles = todosLosBrawlers.filter(brawler =>
+    !brawlersMostrados.some(anterior => anterior.id === brawler.id)
+  );
+
+  if(disponibles.length < 5){
+    disponibles = todosLosBrawlers;
+  }
+
+  const seleccion = mezclarArray(disponibles).slice(0,5);
+
+  brawlersMostrados = seleccion;
+
+  galeria.replaceChildren();
+
+  seleccion.forEach((brawler,index) => {
+
+    const slot = document.createElement("div");
+    slot.className = "brawler-slot";
+    slot.style.setProperty("--delay",(index*0.12)+"s");
+
+    const imagen = document.createElement("img");
+    imagen.className = "brawler-image";
+    imagen.alt = brawler.name;
+    imagen.loading = "eager";
+    imagen.src =
+      BRAWLER_IMAGE_BASE + brawler.id + ".png";
+
+    imagen.onerror = function(){
+
+      this.onerror = null;
+
+      if(brawler.imageUrl2){
+        this.src = brawler.imageUrl2;
+      }else{
+        slot.style.display = "none";
+      }
+
+    };
+
+    const nombre = document.createElement("div");
+    nombre.className = "brawler-name";
+    nombre.textContent = brawler.name;
+
+    slot.appendChild(imagen);
+    slot.appendChild(nombre);
+
+    galeria.appendChild(slot);
+
+  });
+
+}
+
+/* =====================================
+   SISTEMA DEL CAMPEONATO
+   ===================================== */
 
 let questions = [];
 let current = 0;
@@ -941,7 +1060,7 @@ async function finishQuestion(choice){
   scheduleNextQuestion();
 }
 
-/* EFECTO DE CELEBRACIÓN */
+/* CELEBRACIÓN */
 
 function lanzarCelebracion(){
 
@@ -981,7 +1100,7 @@ function scheduleNextQuestion(){
   },3000);
 }
 
-/* AVANCE REAL EN SUPABASE */
+/* AVANCE EN SUPABASE */
 
 async function nextQuestion(){
 
@@ -1158,6 +1277,8 @@ async function cargarClasificacionTwitch(){
 }
 
 /* INICIAR TODO */
+
+cargarBrawlers();
 
 cargarClasificacionTwitch();
 
