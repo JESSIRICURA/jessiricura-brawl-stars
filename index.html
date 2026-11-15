@@ -378,8 +378,6 @@ header p:nth-of-type(2){font-size:14px}
   align-items:start;
 }
 
-/* CLASIFICACIÓN ARRIBA, OCUPANDO TODO EL ANCHO */
-
 .ranking-panel{
   grid-column:1/-1;
 }
@@ -603,9 +601,7 @@ button.next:hover{transform:translateY(-4px)}
   to{opacity:1;transform:scale(1.02)}
 }
 
-/* =====================================
-   NUEVA ARENA DE COMBATE TOP 5
-===================================== */
+/* ARENA DE COMBATE TOP 5 */
 
 .battle-panel{
   min-width:0;
@@ -1096,7 +1092,7 @@ footer{
     </button>
   </div>
 
-  <!-- NUEVA ARENA TOP 5 -->
+  <!-- ARENA TOP 5 -->
 
   <div class="panel battle-panel">
 
@@ -1188,8 +1184,14 @@ async function cargarBrawlers(){
       cambiarGrupoBrawlers();
     },8000);
 
-    /* Cuando ya están cargados los personajes,
-       actualizamos también la arena de combate */
+    /*
+      CORRECCIÓN:
+      Los personajes ya están cargados.
+      Reiniciamos la firma para obligar a reconstruir
+      la arena TOP 5 usando los Brawlers originales.
+    */
+
+    firmaJugadoresCombate = "";
 
     cargarClasificacionTwitch();
 
