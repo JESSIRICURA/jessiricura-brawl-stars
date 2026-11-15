@@ -79,7 +79,7 @@ header p{
 header p:nth-of-type(1){font-size:clamp(16px,3vw,23px)}
 header p:nth-of-type(2){font-size:14px}
 
-/* ARENA CON BRAWLERS */
+/* ARENA */
 
 .arena{
   max-width:1450px;
@@ -138,7 +138,7 @@ header p:nth-of-type(2){font-size:14px}
   letter-spacing:2px;
 }
 
-/* GRUPO DE PERSONAJES */
+/* PERSONAJES */
 
 .brawlers-stage{
   width:100%;
@@ -164,15 +164,19 @@ header p:nth-of-type(2){font-size:14px}
   justify-content:flex-end;
   opacity:0;
   transform:translateY(45px) scale(.75);
-  animation:brawlerEnter .8s cubic-bezier(.2,.8,.2,1) forwards;
+  animation:brawlerEnter 1.15s cubic-bezier(.2,.8,.2,1) forwards;
   filter:drop-shadow(0 12px 9px #0009);
+  transform-origin:center bottom;
+  will-change:transform,opacity;
 }
 
+/* Entrada escalonada */
+
 .brawler-card:nth-child(1){animation-delay:.05s}
-.brawler-card:nth-child(2){animation-delay:.16s}
-.brawler-card:nth-child(3){animation-delay:.27s}
-.brawler-card:nth-child(4){animation-delay:.38s}
-.brawler-card:nth-child(5){animation-delay:.49s}
+.brawler-card:nth-child(2){animation-delay:.20s}
+.brawler-card:nth-child(3){animation-delay:.35s}
+.brawler-card:nth-child(4){animation-delay:.50s}
+.brawler-card:nth-child(5){animation-delay:.65s}
 
 .brawler-card img{
   display:block;
@@ -181,15 +185,31 @@ header p:nth-of-type(2){font-size:14px}
   object-fit:contain;
   object-position:center bottom;
   filter:drop-shadow(0 7px 5px #0008);
-  animation:brawlerFloat 3s ease-in-out infinite;
+  transform-origin:center bottom;
+  animation:brawlerIdle 3.2s ease-in-out infinite;
+  will-change:transform;
 }
 
-.brawler-card:nth-child(even) img{
-  animation-delay:-1.2s;
+/* Cada personaje tiene su propio gesto */
+
+.brawler-card:nth-child(1) img{
+  animation:brawlerIdle 3.1s ease-in-out infinite;
+}
+
+.brawler-card:nth-child(2) img{
+  animation:brawlerFunny2 3.8s ease-in-out infinite;
 }
 
 .brawler-card:nth-child(3) img{
-  animation-delay:-2s;
+  animation:brawlerFunny3 4.2s ease-in-out infinite;
+}
+
+.brawler-card:nth-child(4) img{
+  animation:brawlerFunny4 3.6s ease-in-out infinite;
+}
+
+.brawler-card:nth-child(5) img{
+  animation:brawlerFunny5 4s ease-in-out infinite;
 }
 
 .brawler-name{
@@ -209,34 +229,151 @@ header p:nth-of-type(2){font-size:14px}
   font-weight:1000;
   text-transform:uppercase;
   box-shadow:0 4px 0 #8c4200;
+  transition:opacity .3s,transform .3s;
 }
+
+/* ENTRADA: salto y aterrizaje */
 
 @keyframes brawlerEnter{
-  0%{opacity:0;transform:translateY(55px) scale(.65) rotate(-8deg)}
-  70%{opacity:1;transform:translateY(-8px) scale(1.06) rotate(3deg)}
-  100%{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+  0%{
+    opacity:0;
+    transform:translateY(100px) scale(.55) rotate(-15deg);
+  }
+  45%{
+    opacity:1;
+    transform:translateY(-22px) scale(1.12) rotate(8deg);
+  }
+  65%{
+    transform:translateY(8px) scale(.94) rotate(-4deg);
+  }
+  82%{
+    transform:translateY(-5px) scale(1.03) rotate(2deg);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0) scale(1) rotate(0);
+  }
 }
 
-@keyframes brawlerFloat{
-  0%,100%{transform:translateY(0) rotate(-2deg)}
-  50%{transform:translateY(-10px) rotate(2deg)}
+/* MOVIMIENTOS NATURALES */
+
+@keyframes brawlerIdle{
+  0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}
+  25%{transform:translateY(-5px) rotate(1deg) scale(1.015)}
+  50%{transform:translateY(-11px) rotate(2deg) scale(1.025)}
+  75%{transform:translateY(-4px) rotate(-1deg) scale(1.01)}
 }
+
+/* Gesto gracioso: se inclina y rebota */
+
+@keyframes brawlerFunny2{
+  0%,65%,100%{transform:translateY(0) rotate(0) scale(1)}
+  72%{transform:translateY(-13px) rotate(-9deg) scale(1.04)}
+  80%{transform:translateY(0) rotate(8deg) scale(.96,1.04)}
+  88%{transform:translateY(-5px) rotate(-5deg)}
+  94%{transform:translateY(0) rotate(2deg)}
+}
+
+/* Gesto gracioso: pequeño baile */
+
+@keyframes brawlerFunny3{
+  0%,100%{transform:translateY(0) rotate(0)}
+  20%{transform:translateY(-7px) rotate(-5deg)}
+  40%{transform:translateY(0) rotate(5deg)}
+  60%{transform:translateY(-9px) rotate(-4deg)}
+  80%{transform:translateY(0) rotate(4deg)}
+}
+
+/* Gesto gracioso: sacudida */
+
+@keyframes brawlerFunny4{
+  0%,72%,100%{transform:translateY(0) rotate(0)}
+  76%{transform:translateX(-5px) rotate(-5deg)}
+  80%{transform:translateX(5px) rotate(5deg)}
+  84%{transform:translateX(-4px) rotate(-4deg)}
+  88%{transform:translateX(3px) rotate(3deg)}
+  93%{transform:translateY(-8px) rotate(0)}
+}
+
+/* Gesto gracioso: salto de celebración */
+
+@keyframes brawlerFunny5{
+  0%,68%,100%{transform:translateY(0) rotate(0) scale(1)}
+  75%{transform:translateY(-20px) rotate(-7deg) scale(1.05)}
+  82%{transform:translateY(-5px) rotate(7deg) scale(1.02)}
+  90%{transform:translateY(0) rotate(-3deg) scale(.98,1.02)}
+}
+
+/* SALIDA CAMINANDO */
 
 .brawlers-stage.changing .brawler-card{
-  animation:brawlerExit .45s ease forwards;
+  animation:brawlerWalkOut 1.35s cubic-bezier(.55,.05,.8,.4) forwards;
 }
 
-@keyframes brawlerExit{
-  to{opacity:0;transform:translateY(-35px) scale(.65) rotate(8deg)}
+.brawlers-stage.changing .brawler-card:nth-child(1){
+  animation-delay:0s;
+  --walk-direction:-1;
 }
 
-.brawlers-loading{
-  text-align:center;
-  color:#ffe52b;
-  font-weight:1000;
-  font-size:17px;
-  padding:25px;
-  text-shadow:2px 2px #5a2700;
+.brawlers-stage.changing .brawler-card:nth-child(2){
+  animation-delay:.08s;
+  --walk-direction:-1;
+}
+
+.brawlers-stage.changing .brawler-card:nth-child(3){
+  animation-delay:.16s;
+  --walk-direction:1;
+}
+
+.brawlers-stage.changing .brawler-card:nth-child(4){
+  animation-delay:.24s;
+  --walk-direction:1;
+}
+
+.brawlers-stage.changing .brawler-card:nth-child(5){
+  animation-delay:.32s;
+  --walk-direction:1;
+}
+
+.brawlers-stage.changing .brawler-card img{
+  animation:brawlerWalking 1.35s ease-in-out forwards;
+}
+
+.brawlers-stage.changing .brawler-name{
+  opacity:0;
+  transform:translateY(12px) scale(.8);
+}
+
+@keyframes brawlerWalkOut{
+  0%{
+    opacity:1;
+    transform:translateX(0) translateY(0) rotate(0) scale(1);
+  }
+  15%{
+    transform:translateX(calc(var(--walk-direction)*-5px)) translateY(-7px) rotate(-5deg) scale(1.02);
+  }
+  30%{
+    transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg) scale(.98);
+  }
+  45%{
+    transform:translateX(calc(var(--walk-direction)*-9px)) translateY(-8px) rotate(-5deg);
+  }
+  60%{
+    opacity:1;
+    transform:translateX(calc(var(--walk-direction)*15px)) translateY(0) rotate(5deg) scale(.96);
+  }
+  100%{
+    opacity:0;
+    transform:translateX(calc(var(--walk-direction)*260px)) translateY(35px) rotate(calc(var(--walk-direction)*25deg)) scale(.65);
+  }
+}
+
+@keyframes brawlerWalking{
+  0%,100%{transform:translateY(0) rotate(0) scale(1)}
+  20%{transform:translateY(-9px) rotate(-7deg) scale(1.02,.97)}
+  40%{transform:translateY(0) rotate(7deg) scale(.97,1.03)}
+  60%{transform:translateY(-8px) rotate(-6deg) scale(1.02,.97)}
+  80%{transform:translateY(0) rotate(6deg) scale(.97,1.03)}
 }
 
 /* REGALOS */
@@ -618,6 +755,23 @@ footer{
   .floating{font-size:22px}
   .gift-one{left:1%;top:65px}
   .gift-two{right:1%;top:70px}
+
+  @keyframes brawlerWalkOut{
+    0%{
+      opacity:1;
+      transform:translateX(0) translateY(0) rotate(0) scale(1);
+    }
+    20%{
+      transform:translateX(calc(var(--walk-direction)*-4px)) translateY(-6px) rotate(-5deg);
+    }
+    45%{
+      transform:translateX(calc(var(--walk-direction)*8px)) translateY(0) rotate(5deg);
+    }
+    100%{
+      opacity:0;
+      transform:translateX(calc(var(--walk-direction)*150px)) translateY(25px) rotate(calc(var(--walk-direction)*20deg)) scale(.7);
+    }
+  }
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -637,8 +791,6 @@ footer{
   <p>BRAWL STARS CHAMPIONSHIP</p>
   <p>¡Demuestra que eres el mejor jugador!</p>
 </header>
-
-<!-- ARENA CON PERSONAJES ORIGINALES -->
 
 <section class="arena">
 
@@ -736,6 +888,7 @@ let todosLosBrawlers = [];
 let grupoBrawlers = [];
 let posicionBrawlers = 0;
 let intervaloBrawlers = null;
+let cambiandoBrawlers = false;
 
 async function cargarBrawlers(){
 
@@ -769,7 +922,6 @@ async function cargarBrawlers(){
     }
 
     mezclarBrawlers();
-
     mostrarGrupoBrawlers();
 
     if(intervaloBrawlers){
@@ -807,7 +959,6 @@ function mezclarBrawlers(){
 }
 
 function obtenerImagenBrawler(brawler){
-
   return BRAWLERS_CDN + brawler.id + ".png";
 }
 
@@ -862,9 +1013,17 @@ function mostrarGrupoBrawlers(){
 
 function cambiarGrupoBrawlers(){
 
+  if(cambiandoBrawlers || grupoBrawlers.length === 0){
+    return;
+  }
+
+  cambiandoBrawlers = true;
+
   const escenario = document.getElementById("brawlersStage");
 
   escenario.classList.add("changing");
+
+  /* Dejamos que terminen de caminar y salir */
 
   setTimeout(() => {
 
@@ -876,7 +1035,9 @@ function cambiarGrupoBrawlers(){
 
     mostrarGrupoBrawlers();
 
-  },450);
+    cambiandoBrawlers = false;
+
+  },1750);
 
 }
 
@@ -892,8 +1053,6 @@ let clock = null;
 let finished = false;
 let advanceTimeout = null;
 let championshipEnded = false;
-
-/* CARGAR PREGUNTAS */
 
 async function loadQuestionsFromDatabase(){
 
@@ -964,8 +1123,6 @@ async function loadQuestionsFromDatabase(){
   }
 }
 
-/* MOSTRAR PREGUNTA */
-
 function loadQuestion(){
 
   clearInterval(clock);
@@ -1033,8 +1190,6 @@ function loadQuestion(){
   },1000);
 }
 
-/* RESPONDER */
-
 function answer(choice){
 
   if(finished || championshipEnded){
@@ -1047,8 +1202,6 @@ function answer(choice){
 
   finishQuestion(choice);
 }
-
-/* MOSTRAR RESPUESTA CORRECTA */
 
 async function finishQuestion(choice){
 
@@ -1111,8 +1264,6 @@ async function finishQuestion(choice){
   scheduleNextQuestion();
 }
 
-/* EFECTO DE CELEBRACIÓN */
-
 function lanzarCelebracion(){
 
   const elementos = ["⭐","🌟","🪙","🎁","🏆","✨"];
@@ -1135,8 +1286,6 @@ function lanzarCelebracion(){
   }
 }
 
-/* ESPERAR 3 SEGUNDOS Y AVANZAR */
-
 function scheduleNextQuestion(){
 
   if(advanceTimeout !== null){
@@ -1150,8 +1299,6 @@ function scheduleNextQuestion(){
 
   },3000);
 }
-
-/* AVANCE REAL EN SUPABASE */
 
 async function nextQuestion(){
 
@@ -1213,8 +1360,6 @@ async function nextQuestion(){
 
   }
 }
-
-/* FINAL DEL CAMPEONATO */
 
 function endChampionship(){
 
