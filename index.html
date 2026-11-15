@@ -1471,57 +1471,6 @@ function answer(choice){
   finishQuestion(choice);
 }
 
-async function obtenerRespuestaCorrecta(preguntaId){
-
-  const maxIntentos = 90;
-
-  for(let intento = 1; intento <= maxIntentos; intento++){
-
-    const respuestaResponse = await fetch(
-      BACKEND + "/respuesta-correcta?id=" + encodeURIComponent(preguntaId),
-      {cache:"no-store"}
-    );
-
-    let resultado = {};
-
-    try{
-      resultado = await respuestaResponse.json();
-    }catch(error){
-      resultado = {};
-    }
-
-    if(respuestaResponse.ok){
-
-      const letra = String(resultado.correcta || "").trim().toUpperCase();
-
-      if(!["A","B","C","D"].includes(letra)){
-        throw new Error("El servidor no ha devuelto una respuesta válida");
-      }
-
-      return letra;
-    }
-
-    const respuestaPendiente =
-      respuestaResponse.status === 403 &&
-      String(resultado.error || "").toLowerCase().includes("todavía no está disponible");
-
-    if(!respuestaPendiente){
-      throw new Error(
-        resultado.error || "No se pudo obtener la respuesta correcta (" + respuestaResponse.status + ")"
-      );
-    }
-
-    if(intento < maxIntentos){
-      document.getElementById("message").textContent =
-        "⏳ Esperando la confirmación de la respuesta...";
-
-      await new Promise(resolve => setTimeout(resolve,1000));
-    }
-  }
-
-  throw new Error("El servidor todavía no ha liberado la respuesta correcta. No se ha podido mostrar en verde.");
-}
-
 async function finishQuestion(choice){
 
   if(finished || championshipEnded){
@@ -1548,7 +1497,16 @@ async function finishQuestion(choice){
 
   try{
 
-    const letraCorrecta = await obtenerRespuestaCorrecta(preguntaId);
+    const respuestaResponse = await fetch(
+      BACKEND + "/respuesta-correcta?id=" + preguntaId
+    );
+
+    if(!respuestaResponse.ok){
+      throw new Error("No se pudo obtener la respuesta correcta");
+    }
+
+    const resultado = await respuestaResponse.json();
+    const letraCorrecta = resultado.correcta;
 
     buttons.forEach(button => {
 
