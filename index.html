@@ -1009,6 +1009,259 @@ footer{
     scroll-behavior:auto!important;
   }
 }
+
+
+/* =========================================
+   AJUSTE COMPACTO OBS 1920 x 1080
+   No modifica el funcionamiento del concurso
+========================================= */
+
+@media (min-width: 901px) {
+
+  header {
+    padding: 10px 15px;
+    border-bottom-width: 5px;
+  }
+
+  header h1 {
+    font-size: 38px;
+  }
+
+  header p {
+    margin-top: 4px;
+  }
+
+  header p:nth-of-type(1) {
+    font-size: 17px;
+  }
+
+  header p:nth-of-type(2) {
+    font-size: 11px;
+  }
+
+  .arena {
+    max-width: 1780px;
+    min-height: 185px;
+    margin: 5px auto 0;
+    padding: 5px 12px;
+  }
+
+  .arena-floor {
+    height: 65px;
+  }
+
+  .arena-title {
+    top: 5px;
+    padding: 6px 15px;
+    border-width: 2px;
+  }
+
+  .arena-title h2 {
+    font-size: 19px;
+  }
+
+  .arena-title p {
+    font-size: 9px;
+    margin-top: 3px;
+  }
+
+  .brawlers-stage {
+    min-height: 135px;
+    margin-top: 42px;
+    gap: 10px;
+  }
+
+  .brawler-card {
+    height: 130px;
+    max-width: 155px;
+  }
+
+  .brawler-card img {
+    height: 108px;
+  }
+
+  .brawler-name {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .gift {
+    width: 32px;
+    height: 32px;
+  }
+
+  .floating {
+    font-size: 22px;
+  }
+
+  .container {
+    max-width: 1780px;
+    margin: auto;
+    padding: 7px 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    grid-template-areas:
+      "question ranking"
+      "question battle";
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .ranking-panel {
+    grid-area: ranking;
+    grid-column: auto;
+  }
+
+  .question-panel {
+    grid-area: question;
+  }
+
+  .battle-panel {
+    grid-area: battle;
+  }
+
+  .panel {
+    padding: 12px;
+    border-radius: 17px;
+    border-width: 3px;
+  }
+
+  .panel h2 {
+    font-size: 19px;
+    margin: 2px 0 7px;
+  }
+
+  .timer {
+    width: 82px;
+    height: 82px;
+    margin: 9px auto;
+    font-size: 31px;
+    border-width: 6px;
+    outline-width: 3px;
+  }
+
+  .question {
+    font-size: 25px;
+    line-height: 1.2;
+    margin: 12px 0;
+    padding: 13px 12px;
+  }
+
+  .answers {
+    gap: 9px;
+    margin-top: 10px;
+  }
+
+  .answer {
+    min-height: 52px;
+    padding: 9px 8px;
+    font-size: 15px;
+    border-width: 3px;
+  }
+
+  .message {
+    font-size: 14px;
+    min-height: 23px;
+    margin: 10px 0 5px;
+  }
+
+  button.next {
+    margin-top: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  .ranking-subtitle {
+    margin: 5px 0 8px;
+    font-size: 12px;
+  }
+
+  .champion-box {
+    gap: 6px;
+  }
+
+  .player-rank {
+    grid-template-columns: 38px 1fr auto;
+    gap: 7px;
+    padding: 7px;
+    border-width: 2px;
+  }
+
+  .player-position {
+    font-size: 21px;
+  }
+
+  .player-name {
+    font-size: 14px;
+  }
+
+  .player-points {
+    font-size: 14px;
+  }
+
+  .ranking-footer {
+    margin-top: 8px;
+    font-size: 11px;
+  }
+
+  .battle-heading {
+    margin-bottom: 5px;
+  }
+
+  .battle-heading h2 {
+    font-size: 19px;
+  }
+
+  .battle-heading p {
+    font-size: 9px;
+  }
+
+  .battle-status {
+    margin: 6px 0;
+    font-size: 9px;
+  }
+
+  .battle-stage {
+    min-height: 165px;
+    padding: 10px 4px 8px;
+    gap: 2px;
+  }
+
+  .battle-fighter {
+    height: 130px;
+  }
+
+  .battle-fighter img {
+    height: 88px;
+  }
+
+  .battle-player-position {
+    font-size: 9px;
+    min-width: 23px;
+    padding: 3px 4px;
+  }
+
+  .battle-player-name {
+    font-size: 8px;
+    padding: 3px 1px;
+  }
+
+  .battle-player-points {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+
+  .battle-message {
+    margin-top: 6px;
+    font-size: 9px;
+  }
+
+  footer {
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+}
+
 </style>
 </head>
 
