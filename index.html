@@ -319,7 +319,7 @@ const BACKEND =
 let questions = [];
 let current = 0;
 let score = 0;
-let time = 23;
+let time = 15;
 let clock = null;
 let finished = false;
 let advanceTimeout = null;
@@ -415,7 +415,7 @@ function loadQuestion(){
   }
 
   finished = false;
-  time = 23;
+  time = 15;
 
   const pregunta = questions[current];
 
@@ -492,12 +492,14 @@ async function finishQuestion(choice){
     return;
   }
 
-  
-
   const preguntaId = questions[current].id;
 
   finished = true;
   clearInterval(clock);
+
+  // El contador permanece en cero
+  time = 0;
+  document.getElementById("timer").textContent = "0";
 
   const buttons = document.querySelectorAll(".answer");
 
@@ -511,36 +513,7 @@ async function finishQuestion(choice){
 
   try{
 
-    const response = await fetch(
-      BACKEND + "/avanzar-pregunta",
-      {method:"POST"}
-    );
-
-    if(!response.ok){
-      throw new Error("No se pudo avanzar a la siguiente pregunta");
-    }
-
-    const data = await response.json();
-
-    console.log("AVANCE DEL CONCURSO:", data);
-
-if(data.estado !== "avanzada"){
-  console.log("La pregunta todavía no ha avanzado:", data);
-
-  if(data.estado === "en_curso"){
-    const espera = Math.max(1, Number(data.segundos_restantes) || 1);
-
-    setTimeout(() => {
-      finished = false;
-      finishQuestion(null);
-    }, espera * 1000);
-
-    return;
-  }
-
-  throw new Error("El servidor no pudo avanzar a la siguiente pregunta");
-}
-    
+    // Obtener primero la respuesta correcta
     const respuestaResponse = await fetch(
       BACKEND + "/respuesta-correcta?id=" + preguntaId
     );
@@ -552,24 +525,28 @@ if(data.estado !== "avanzada"){
     const resultado = await respuestaResponse.json();
     const letraCorrecta = resultado.correcta;
 
+    // Iluminar la respuesta correcta en verde
     buttons.forEach(button => {
       if(button.textContent.trim().startsWith(letraCorrecta + ".")){
         button.classList.add("correct");
       }
     });
 
-    message.textContent = "✅ ¡La respuesta correcta era " + letraCorrecta + "!";
+    message.textContent =
+      "✅ ¡La respuesta correcta era " + letraCorrecta + "!";
 
   }catch(error){
 
-    console.error("ERROR AL FINALIZAR PREGUNTA:", error);
+    console.error("ERROR AL MOSTRAR LA RESPUESTA:", error);
 
     message.textContent = "⚠️ " + error.message;
 
   }
 
+  // Esperar 3 segundos antes de avanzar
   scheduleNextQuestion();
 }
+
 /* =================================
    AVANCE AUTOMÁTICO
 ================================= */
