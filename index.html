@@ -1142,9 +1142,13 @@ function loadQuestion(){
   }
 
   document.getElementById("timer").textContent = time;
-  document.getElementById("number").textContent = "";
-  document.getElementById("round").textContent = "";
-  document.getElementById("score").textContent = score;
+  const numberElement = document.getElementById("number");
+const roundElement = document.getElementById("round");
+const scoreElement = document.getElementById("score");
+
+if(numberElement) numberElement.textContent = "";
+if(roundElement) roundElement.textContent = "";
+if(scoreElement) scoreElement.textContent = score;
   document.getElementById("question").textContent = pregunta.q;
   document.getElementById("message").textContent =
     "💬 ¡Responde en el chat de Twitch escribiendo A, B, C o D!";
